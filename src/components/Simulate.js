@@ -88,15 +88,27 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
 
       if (result && !result.error) {
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
-        addLog(`Threat level: ${result.threatLevel}/10 - Source: ${result.source}`, "result");
-        addLog(`Model: ${result.model}`, "compute");
+        addLog(`Threat Level: ${result.threatLevel}/10`, "result");
+        if (result.reasoning) {
+          addLog(`AI Reasoning: "${result.reasoning}"`, "result");
+        }
+        addLog(`0G Model: ${result.model}`, "compute");
         if (result.provider) {
-          addLog(`0G Compute Provider: ${result.provider.slice(0, 10)}... (Tokens: ${result.usage?.total_tokens || 60}+)`, "compute");
+          addLog(`0G Provider: ${result.provider}`, "compute");
+        }
+        if (result.requestId) {
+          addLog(`0G Request ID: ${result.requestId}`, "compute");
+        }
+        if (result.usage) {
+          addLog(`Tokens Used: ${result.usage.total_tokens} (prompt: ${result.usage.prompt_tokens}, completion: ${result.usage.completion_tokens})`, "compute");
+        }
+        if (result.trace?.billing?.total_cost) {
+          addLog(`Compute Cost: ${result.trace.billing.total_cost} a0gi`, "compute");
         }
         await wait(400);
 
         if (result.evidenceHash) {
-          addLog(`Evidence stored on 0G Storage: ${result.evidenceHash.slice(0, 14)}...`, "storage");
+          addLog(`Evidence stored on 0G Storage: ${result.evidenceHash.slice(0, 16)}...`, "storage");
         }
         await wait(300);
 
@@ -149,15 +161,27 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
 
       if (result && !result.error) {
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
-        addLog(`Threat level: ${result.threatLevel}/10 - Source: ${result.source}`, "result");
-        addLog(`Model: ${result.model}`, "compute");
+        addLog(`Threat Level: ${result.threatLevel}/10`, "result");
+        if (result.reasoning) {
+          addLog(`AI Reasoning: "${result.reasoning}"`, "result");
+        }
+        addLog(`0G Model: ${result.model}`, "compute");
         if (result.provider) {
-          addLog(`0G Compute Provider: ${result.provider.slice(0, 10)}... (Tokens: ${result.usage?.total_tokens || 60}+)`, "compute");
+          addLog(`0G Provider: ${result.provider}`, "compute");
+        }
+        if (result.requestId) {
+          addLog(`0G Request ID: ${result.requestId}`, "compute");
+        }
+        if (result.usage) {
+          addLog(`Tokens Used: ${result.usage.total_tokens} (prompt: ${result.usage.prompt_tokens}, completion: ${result.usage.completion_tokens})`, "compute");
+        }
+        if (result.trace?.billing?.total_cost) {
+          addLog(`Compute Cost: ${result.trace.billing.total_cost} a0gi`, "compute");
         }
         await wait(400);
 
         if (result.evidenceHash) {
-          addLog(`Evidence stored on 0G Storage: ${result.evidenceHash.slice(0, 14)}...`, "storage");
+          addLog(`Evidence stored on 0G Storage: ${result.evidenceHash.slice(0, 16)}...`, "storage");
         }
         await wait(300);
 
