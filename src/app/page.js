@@ -119,11 +119,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="landing-nav">
         <div className="landing-logo">
-          <div className="landing-logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
+          <img src="/logo.png" alt="Hashly" style={{ width: 28, height: 28, borderRadius: 6, objectFit: "cover" }} />
           Hashly
         </div>
         <div className="landing-nav-links">

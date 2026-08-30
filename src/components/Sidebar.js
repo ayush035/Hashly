@@ -7,13 +7,9 @@ export default function Sidebar({ activePage, setActivePage, threatCount }) {
     <aside className="sidebar">
       <div className="sidebar-header">
         <div className="sidebar-brand">
-          <div className="sidebar-brand-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
+          <img src="/logo.png" alt="Hashly" style={{ width: 24, height: 24, borderRadius: 6, objectFit: "cover" }} />
           <span className="sidebar-brand-name">Hashly</span>
-          <span className="sidebar-brand-tag">beta</span>
+          <span className="sidebar-brand-tag">0G</span>
         </div>
       </div>
 
