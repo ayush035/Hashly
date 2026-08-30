@@ -1,6 +1,10 @@
-# Hashly - Autonomous AI DeFi Security & Circuit Breaker Network
+<p align="center">
+  <img src="public/logo.png" alt="Hashly Logo" width="120" />
+</p>
 
-> **Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time, tokenized as ERC-7857 Agentic IDs on 0G Network.**
+# Hashly — Autonomous AI DeFi Security & Circuit Breaker Network
+
+> **Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time — tokenized as ERC-7857 Agentic IDs on 0G Network.**
 
 [![0G Galileo Testnet](https://img.shields.io/badge/0G%20Chain-Galileo%20(16602)-indigo.svg)](https://chainscan-galileo.0g.ai)
 [![0G Compute](https://img.shields.io/badge/0G%20Compute-Verifiable%20AI-blue.svg)](https://docs.0g.ai)

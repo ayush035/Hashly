@@ -7,7 +7,7 @@ export default function Sidebar({ activePage, setActivePage, threatCount }) {
     <aside className="sidebar">
       <div className="sidebar-header">
         <div className="sidebar-brand">
-          <img src="/logo.png" alt="Hashly" style={{ width: 24, height: 24, borderRadius: 6, objectFit: "cover" }} />
+          <img src="/logo.png" alt="Hashly" style={{ width: 28, height: 28, objectFit: "contain" }} />
           <span className="sidebar-brand-name">Hashly</span>
           <span className="sidebar-brand-tag">0G</span>
         </div>
