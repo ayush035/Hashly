@@ -1,169 +1,169 @@
-# 🛡️ Sentin0G — Autonomous DeFi Security Guardians
+# Hashly — Autonomous AI DeFi Security & Circuit Breaker Network
 
-> **Autonomous AI security agents that detect and prevent DeFi exploits in real-time, tokenized as ERC-7857 Agentic IDs on 0G Network.**
+> **Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time — tokenized as ERC-7857 Agentic IDs on 0G Network.**
 
-Built for the [0G Bridge Buildathon by AKINDO](https://build.0g.ai/) — Wave 1 Submission.
+[![0G Galileo Testnet](https://img.shields.io/badge/0G%20Chain-Galileo%20(16602)-indigo.svg)](https://chainscan-galileo.0g.ai)
+[![0G Compute](https://img.shields.io/badge/0G%20Compute-Verifiable%20AI-blue.svg)](https://docs.0g.ai)
+[![0G Storage](https://img.shields.io/badge/0G%20Storage-Decentralized%20Proof-emerald.svg)](https://docs.0g.ai)
+[![ERC-7857](https://img.shields.io/badge/Standard-ERC--7857%20Agentic%20ID-violet.svg)](https://eips.ethereum.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](LICENSE)
 
-![License](https://img.shields.io/badge/license-MIT-blue)
-![0G Chain](https://img.shields.io/badge/0G-Newton%20Testnet-cyan)
-![ERC-7857](https://img.shields.io/badge/ERC--7857-Agentic%20ID-purple)
-
----
-
-## 🚀 What is Sentin0G?
-
-**Sentin0G** deploys AI-powered Sentinel agents that continuously monitor smart contracts for reentrancy, flash loan, and oracle manipulation attacks. When an exploit is detected, Sentinels reach swarm consensus and execute automated circuit-breaker pauses on-chain — protecting protocols before damage occurs.
-
-### The Problem
-
-Over **$2B is lost annually** to DeFi exploits. Traditional security tools merely alert humans via Discord/Telegram, taking 15–45 minutes to respond — far too slow when a hacker's transaction executes in 12 seconds.
-
-### The Solution
-
-Autonomous AI Security Guardians that:
-- 🔍 **Detect** exploits in real-time using AI inference on **0G Compute**
-- 🛡️ **Block** attacks by triggering circuit-breaker pauses on **0G Chain**
-- 🤖 **Evolve** as tokenized agents (ERC-7857 **Agentic IDs**) that improve with each detection
-- 💾 **Store** exploit evidence and patterns on **0G Storage**
+Built for the **0G Bridge Buildathon by AKINDO** — Wave 1 Submission.
 
 ---
 
-## 🏗️ Architecture
+## 📌 One-Liner Description
 
+**Hashly is an autonomous on-chain security network that intercepts DeFi exploits in real time using 0G Compute for AI threat classification, 0G Storage for immutable evidence anchoring, and ERC-7857 Agentic IDs for automated circuit breakers on 0G Chain.**
+
+---
+
+## 📖 Detailed Project Description
+
+DeFi exploits cause over **$2 Billion in losses annually**. When reentrancy, flash loan price manipulation, or oracle drift occurs, the attack executes in seconds. Traditional security solutions rely on off-chain human monitoring and alerts (Discord/Telegram bots) which take 15 to 45 minutes to triage — far too late to stop an exploit.
+
+**Hashly** replaces passive alerts with an autonomous, verifiable, closed-loop security infrastructure built natively on the **0G Network**:
+
+1. **Sub-Second Threat Classification (0G Compute):** Transaction execution traces (gas spikes, call stack depth, state delta anomalies) are classified in real time by decentralized AI models running on the **0G Compute Router**.
+2. **Immutable Forensic Storage (0G Storage):** Complete exploit telemetry, trace data, and model inference results are cryptographically hashed and anchored into **0G Storage** via the official 0G Storage TS-SDK.
+3. **Automated On-Chain Circuit Breakers (0G Chain):** If an exploit threat level exceeds safety thresholds ($\ge 7/10$), Hashly executes on-chain transaction calls to `ProtocolGuard.sol` on 0G Galileo Testnet, pausing the vulnerable contract instantly within the same execution block.
+4. **Decentralized Agentic Identities (ERC-7857):** Security agents are ownable, transferable, and evolving on-chain assets. Each Sentinel accumulates reputation on 0G Chain based on verified detections, advancing through tiers: **Scout $\to$ Guardian $\to$ Warden $\to$ Overlord**.
+
+---
+
+## ⚡ Full-Stack 0G Integration
+
+Hashly is built from the ground up to utilize all four core pillars of the 0G modular AI ecosystem:
+
+```mermaid
+flowchart TD
+    subgraph "1. 0G Compute Layer"
+        A["Mempool / Exploit Trace"] -->|Calldata & Execution Depth| B["0G Compute Router (qwen2.5-omni / Llama)"]
+        B -->|Threat Score & Reasoning| C["Verified Security Classification"]
+    end
+
+    subgraph "2. 0G Storage Layer"
+        C -->|Raw Trace & Telemetry| D["0G Storage TS SDK (Blob API)"]
+        D -->|Merkle Proof Root Hash| E["0G Decentralized Storage Node"]
+    end
+
+    subgraph "3. 0G Chain & Smart Contracts"
+        C -->|Threat Level >= 7/10| F["ProtocolGuard.raiseAlert()"]
+        F -->|Auto-Pause Target Vault| G["VulnerableVault.sol (Paused)"]
+        F -->|Reputation +1| H["SentinelRegistry.sol (ERC-7857)"]
+    end
 ```
-┌──────────────────────────────────────────────────┐
-│              SENTIN0G DASHBOARD                  │
-│           (Next.js + ethers.js)                  │
-│                                                  │
-│  📊 Dashboard  │  🤖 Sentinels  │  ⚡ Simulate  │
-└──────┬─────────────┬────────────────┬────────────┘
-       │             │                │
-  ┌────▼─────────────▼────────────────▼────────────┐
-  │             BACKEND API (Next.js Routes)       │
-  │                                                │
-  │  ┌────────────┐ ┌────────────┐ ┌─────────────┐│
-  │  │0G Compute  │ │0G Storage  │ │ 0G Chain    ││
-  │  │Router API  │ │(Exploit DB)│ │ (Contracts) ││
-  │  │AI Inference│ │Evidence    │ │ Circuit Brk ││
-  │  └────────────┘ └────────────┘ └─────────────┘│
-  └────────────────────────────────────────────────┘
-```
+
+| 0G Technology | Hashly Integration Details |
+|---|---|
+| **0G Compute Router** | Sub-second decentralized inference via OpenAI-compatible endpoint (`qwen2.5-omni` / Llama-4-Scout) to classify exploit signatures (reentrancy, flash loan manipulation, oracle drift, access control breaches). |
+| **0G Storage** | Uploads tamper-proof JSON evidence blobs containing raw execution traces, model reasoning, and timestamps using `@0gfoundation/0g-storage-ts-sdk`. Returns on-chain verifiable Merkle root hashes. |
+| **0G Chain (Galileo)** | High-throughput EVM blockchain (Chain ID `16602`) hosting `SentinelRegistry.sol`, `ProtocolGuard.sol`, and protected vaults with $<2\text{s}$ confirmation times. |
+| **ERC-7857 Standard** | On-chain Agentic IDs with dynamic metadata URIs, behavioral system prompts, security specializations, and on-chain reputation tiering. |
 
 ---
 
-## 🔗 0G Components Used
+## 📜 Deployed Smart Contracts (0G Galileo Testnet — Chain ID: 16602)
 
-| Component | Usage | Details |
-|:--|:--|:--|
-| **0G Chain** | Smart contracts on Newton Testnet | SentinelRegistry, ProtocolGuard, VulnerableVault |
-| **0G Compute** | AI inference for exploit classification | OpenAI-compatible Router API at `router-api-testnet.integratenetwork.work/v1` |
-| **0G Storage** | Exploit pattern DB & evidence logs | Storing detection evidence and Sentinel metadata |
-| **ERC-7857 (Agentic ID)** | Tokenized AI Sentinel agents | SentinelRegistry implements ERC-7857 patterns for ownable, evolving AI agents |
-
----
-
-## 📦 Smart Contracts
-
-### SentinelRegistry.sol (ERC-7857 Agentic ID)
-- Mint Sentinel agents as tokenized Agentic IDs
-- Dynamic reputation system (Scout → Guardian → Warden → Overlord)
-- Encrypted metadata URI pointing to 0G Storage
-- Secure transfer with operator authorization
-
-### ProtocolGuard.sol (Circuit Breaker)
-- Register protocols for Sentinel monitoring
-- Automated circuit-breaker triggers on high-severity threats
-- Alert management with evidence chain
-- Integration with SentinelRegistry for reputation updates
-
-### VulnerableVault.sol (Demo Target)
-- Intentionally vulnerable DeFi vault for demo
-- Contains reentrancy vulnerability for Sentinel detection showcase
+| Contract | Address on 0G Galileo | Description |
+|---|---|---|
+| **SentinelRegistry** (ERC-7857) | [`0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE`](https://chainscan-galileo.0g.ai/address/0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE) | Tokenized Agentic IDs with custom system prompts, specialization tracking, and on-chain reputation advancement. |
+| **ProtocolGuard** (Circuit Breaker) | [`0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC`](https://chainscan-galileo.0g.ai/address/0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC) | Autonomous security hub that verifies threats, triggers emergency circuit-breaker pauses on target contracts, and updates sentinel reputation. |
+| **VulnerableVault** (Demo Protocol) | [`0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5`](https://chainscan-galileo.0g.ai/address/0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5) | Live DeFi vault contract deployed on 0G Galileo containing a reentrancy vector to demonstrate active protection and autonomous pausing. |
 
 ---
 
-## 🖥️ Local Setup
+## 🗺️ Buildathon Roadmap
+
+### 🏆 Wave 1: Core Architecture & Live On-Chain Integration (Current)
+- [x] **Smart Contract Suite:** Deployed `SentinelRegistry` (ERC-7857), `ProtocolGuard`, and `VulnerableVault` to 0G Galileo Testnet.
+- [x] **0G Compute Integration:** Live zero-shot DeFi exploit classification via 0G Compute Router (`qwen2.5-omni` with usage/billing trace telemetry).
+- [x] **0G Storage Integration:** Live upload of forensic audit records and evidence JSONs via `@0gfoundation/0g-storage-ts-sdk`.
+- [x] **ERC-7857 Agent Minting:** Configurable on-chain agent deployment with custom security specialization (Reentrancy, Flash Loan, Oracle, Access Control) and system prompts.
+- [x] **Interactive Simulator:** End-to-end exploit simulator demonstrating mempool interception $\to$ 0G Compute $\to$ 0G Storage $\to$ On-chain circuit-breaker pause.
+- [x] **Production dApp:** Dark, institutional security interface built with Next.js 15, RainbowKit, Wagmi, and multi-RPC fallback support.
+
+---
+
+### 🚀 Wave 2: Swarm Consensus & Decentralized Sentinel Daemons
+- [ ] **Sentinel Swarm Consensus:** Multi-agent voting mechanism where $\ge 3$ independent Sentinel Agentic IDs must corroborate high-severity alerts before triggering global circuit breakers.
+- [ ] **Background Node Daemon (CLI / Docker):** Open-source headless sentinel runner (Rust/Node.js) that protocol operators can run locally to monitor mempool transactions via WebSocket RPC.
+- [ ] **Zk-Proof Verification on 0G:** Integrating zero-knowledge inference proofs verifying that 0G Compute model outputs have not been tampered with before triggering circuit breakers.
+- [ ] **Custom Protocol SDK (`@hashly/guard`):** A 1-line Solidity modifier `hashlyProtected` and npm package for third-party protocols on 0G to plug into the sentinel network.
+
+---
+
+### 🌐 Wave 3: Cross-Chain Settlement & Agent Marketplace
+- [ ] **Cross-Chain Circuit Breakers:** Cross-chain messaging to allow Sentinels on 0G Network to trigger emergency pauses on Ethereum, Arbitrum, and Base.
+- [ ] **ERC-7857 Agent Marketplace:** Decentralized marketplace to buy, rent, stake, and compose high-reputation Sentinel agents.
+- [ ] **Bounty & Slash Staking:** Staking mechanism where sentinel operators stake $OG tokens to earn detection bounties and face slashing for unverified false alarms.
+- [ ] **Automated Exploit Patch Synthesizer:** AI-generated Solidity hot-fix patches stored on 0G Storage alongside exploit reports.
+
+---
+
+## 💻 Quickstart & Local Setup
 
 ### Prerequisites
 - Node.js 20+
-- MetaMask browser extension
-- 0G testnet tokens ([Faucet](https://faucet.0g.ai))
+- MetaMask or any EVM wallet
+- 0G Galileo Testnet tokens from [0G Faucet](https://faucet.0g.ai)
 
 ### Installation
 
 ```bash
-# Clone the repository
+# 1. Clone repository
 git clone https://github.com/ayush035/Hashly.git
 cd Hashly
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Copy environment variables
-cp .env.example .env
-# Edit .env with your keys (see .env.example for details)
-
-# Compile smart contracts
-npx hardhat compile
-
-# Run development server
-npm run dev
+# 3. Configure environment variables
+cp .env.example .env.local
 ```
 
-### Deploy Contracts to 0G Testnet
-
-```bash
-# Add your private key to .env
-# Get testnet tokens from https://faucet.0g.ai
-
-npx hardhat run scripts/deploy.js --network 0g-testnet
-```
-
-### Environment Variables
+### Environment Configuration (`.env.local`)
 
 ```env
-PRIVATE_KEY=your_wallet_private_key
-ZG_COMPUTE_API_KEY=your_0g_compute_api_key  # from pc.testnet.0g.ai
-NEXT_PUBLIC_CHAIN_ID=16600
-NEXT_PUBLIC_RPC_URL=https://evmrpc-testnet.0g.ai
+# 0G Galileo Testnet RPC
+ZG_TESTNET_RPC=https://evmrpc-testnet.0g.ai
+
+# 0G Compute Router
+ZG_COMPUTE_API_KEY=your_funded_0g_compute_key
+ZG_COMPUTE_BASE_URL=https://router-api-testnet.integratenetwork.work/v1
+
+# 0G Storage
+ZG_STORAGE_RPC=https://storage-testnet.0g.ai
+
+# Deployer Key (for automated backend alert triggering & storage gas)
+PRIVATE_KEY=your_private_key
+
+# Contracts on 0G Galileo (Chain ID: 16602)
+NEXT_PUBLIC_SENTINEL_REGISTRY=0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE
+NEXT_PUBLIC_PROTOCOL_GUARD=0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC
+NEXT_PUBLIC_VULNERABLE_VAULT=0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5
 ```
 
----
+### Run Locally
 
-## 🎮 Features
-
-### 📊 Threat Dashboard
-Real-time monitoring with live threat feed, risk heatmap, and animated statistics.
-
-### 🤖 Sentinel Agents
-Mint, browse, and manage AI security agents. Watch their reputation evolve as they detect threats.
-
-### ⚡ Exploit Simulator
-Simulate real DeFi attacks (reentrancy, flash loans) and watch Sentinels detect and neutralize them in real-time.
+```bash
+npm run dev
+# Open http://localhost:3000
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
-|:--|:--|
-| Frontend | Next.js 15 (App Router) |
-| Styling | Custom CSS Design System |
-| Wallet | ethers.js v6 + MetaMask |
-| Smart Contracts | Solidity 0.8.20 + Hardhat 3 |
-| AI Inference | 0G Compute Router API |
-| Storage | 0G Storage |
-| Blockchain | 0G Chain (Newton Testnet) |
-
----
-
-## 📊 Submission Details
-
-- **Project:** Sentin0G
-- **Wave:** 1
-- **Buildathon:** 0G Bridge by AKINDO
-- **Hashtags:** #0GBridge #BuildOn0G
-- **Tags:** @0G_labs @0G_Builders @AKINDO_io
+|---|---|
+| **Frontend Framework** | Next.js 15 (App Router, Turbopack) |
+| **Web3 & Wallet** | Wagmi v2, Viem v2, RainbowKit |
+| **AI Inference** | 0G Compute Router (`qwen2.5-omni` / Llama-4-Scout) |
+| **Data Storage** | 0G Decentralized Storage (`@0gfoundation/0g-storage-ts-sdk`) |
+| **Smart Contracts** | Solidity 0.8.20, Hardhat |
+| **Blockchain** | 0G Galileo Testnet (Chain ID `16602`) |
+| **Agent Token Standard** | ERC-7857 (Agentic IDs) |
 
 ---
 
@@ -174,5 +174,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  Built with 🛡️ on <a href="https://0g.ai">0G Network</a>
+  Built with 🛡️ on <a href="https://0g.ai"><strong>0G Network</strong></a> for the <strong>0G Bridge Buildathon</strong>
 </p>
