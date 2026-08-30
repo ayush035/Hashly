@@ -9,6 +9,7 @@ export default function LandingPage() {
   const [counters, setCounters] = useState({ contracts: 0, threats: 0, uptime: 0 });
   const statsRef = useRef(null);
   const hasAnimated = useRef(false);
+  const [activeArch, setActiveArch] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,6 +68,45 @@ export default function LandingPage() {
       revealRefs.current.push(el);
     }
   };
+
+  const archLayers = [
+    {
+      id: "chain",
+      name: "0G Chain",
+      desc: "Smart contracts deployed on Galileo Testnet. SentinelRegistry manages ERC-7857 agent NFTs, ProtocolGuard triggers circuit breakers, and VulnerableVault provides simulation targets.",
+      color: "var(--accent)",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      ),
+    },
+    {
+      id: "compute",
+      name: "0G Compute",
+      desc: "AI inference routed through the 0G Compute Router API. Llama-4-Scout model classifies exploit types (reentrancy, flash loan, oracle manipulation) with confidence scoring in under 2 seconds.",
+      color: "#8b5cf6",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      ),
+    },
+    {
+      id: "storage",
+      name: "0G Storage",
+      desc: "Exploit evidence (transaction traces, AI analysis results, threat metadata) is hashed and permanently stored on 0G decentralized storage for tamper-proof forensic records.",
+      color: "var(--green)",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      ),
+    },
+    {
+      id: "erc7857",
+      name: "ERC-7857",
+      desc: "Agentic ID standard for tokenized AI agents. Each sentinel gains on-chain reputation through successful detections and advances through Scout, Guardian, Warden, and Overlord tiers.",
+      color: "var(--orange)",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      ),
+    },
+  ];
 
   return (
     <div className="landing">
@@ -133,7 +173,7 @@ export default function LandingPage() {
               alt="Hashly AI Shield"
               width={280}
               height={280}
-              style={{ opacity: 0.7, filter: "drop-shadow(0 0 40px rgba(99,102,241,0.3))" }}
+              style={{ borderRadius: 16, filter: "drop-shadow(0 0 40px rgba(99,102,241,0.3))" }}
             />
           </div>
         </div>
@@ -183,8 +223,8 @@ export default function LandingPage() {
             </div>
             <h3>Real-time Detection</h3>
             <p>
-              AI models classify exploit patterns — reentrancy, flash loans,
-              oracle manipulation — with sub-second latency via 0G Compute Router.
+              AI models classify exploit patterns like reentrancy, flash loans,
+              and oracle manipulation with sub-second latency via 0G Compute Router.
             </p>
             <div className="feature-tag">0G Compute</div>
           </div>
@@ -198,7 +238,7 @@ export default function LandingPage() {
             <h3>Automated Circuit Breaker</h3>
             <p>
               When a critical threat is detected, the on-chain circuit breaker
-              pauses the protocol automatically — no human in the loop.
+              pauses the protocol automatically. No human in the loop.
             </p>
             <div className="feature-tag">0G Chain</div>
           </div>
@@ -229,88 +269,135 @@ export default function LandingPage() {
             <h3>Immutable Evidence</h3>
             <p>
               All exploit evidence and detection traces are hashed and stored
-              permanently on 0G Storage — tamper-proof forensic records.
+              permanently on 0G Storage for tamper-proof forensic records.
             </p>
             <div className="feature-tag">0G Storage</div>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
+      {/* How it works - Vertical pipeline */}
       <section className="section" id="how-it-works">
         <div className="reveal" ref={addRef}>
           <div className="section-label">Process</div>
           <div className="section-title">From threat to resolution in seconds.</div>
           <div className="section-desc">
-            A fully autonomous pipeline — no dashboards to watch, no alerts to triage.
+            A fully autonomous pipeline. No dashboards to watch, no alerts to triage.
           </div>
         </div>
 
-        <div className="pipeline reveal" ref={addRef}>
-          <div className="pipeline-step">
-            <div className="pipeline-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <div className="pipeline-vertical reveal" ref={addRef}>
+          <div className="pv-step">
+            <div className="pv-marker">
+              <div className="pv-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <div className="pv-line" />
             </div>
-            <div className="pipeline-num">01</div>
-            <h4>Transaction Intercepted</h4>
-            <p>Sentinel agents monitor target contracts for unusual patterns — high gas, recursive calls, flash loan activity.</p>
+            <div className="pv-content">
+              <div className="pv-num">01</div>
+              <h4>Transaction Intercepted</h4>
+              <p>Sentinel agents monitor target contracts for unusual patterns including high gas usage, recursive calls, and flash loan activity.</p>
+            </div>
           </div>
-          <div className="pipeline-connector"><div className="connector-line" /></div>
-          <div className="pipeline-step">
-            <div className="pipeline-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+
+          <div className="pv-step">
+            <div className="pv-marker">
+              <div className="pv-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div className="pv-line" />
             </div>
-            <div className="pipeline-num">02</div>
-            <h4>AI Classification</h4>
-            <p>Transaction data goes to 0G Compute Router for decentralized AI inference via Llama-4-Scout model.</p>
+            <div className="pv-content">
+              <div className="pv-num">02</div>
+              <h4>AI Classification</h4>
+              <p>Transaction data is sent to the 0G Compute Router for decentralized AI inference using the Llama-4-Scout model.</p>
+            </div>
           </div>
-          <div className="pipeline-connector"><div className="connector-line" /></div>
-          <div className="pipeline-step">
-            <div className="pipeline-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+
+          <div className="pv-step">
+            <div className="pv-marker">
+              <div className="pv-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+              </div>
+              <div className="pv-line" />
             </div>
-            <div className="pipeline-num">03</div>
-            <h4>Evidence Stored</h4>
-            <p>Detection evidence and transaction traces are hashed and stored immutably on 0G&apos;s decentralized storage layer.</p>
+            <div className="pv-content">
+              <div className="pv-num">03</div>
+              <h4>Evidence Stored</h4>
+              <p>Detection evidence and transaction traces are hashed and stored immutably on 0G&apos;s decentralized storage layer.</p>
+            </div>
           </div>
-          <div className="pipeline-connector"><div className="connector-line" /></div>
-          <div className="pipeline-step">
-            <div className="pipeline-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+
+          <div className="pv-step">
+            <div className="pv-marker">
+              <div className="pv-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div className="pv-line" />
             </div>
-            <div className="pipeline-num">04</div>
-            <h4>Circuit Breaker</h4>
-            <p>If threat level exceeds threshold, ProtocolGuard contract pauses the vulnerable protocol automatically.</p>
+            <div className="pv-content">
+              <div className="pv-num">04</div>
+              <h4>Circuit Breaker Triggered</h4>
+              <p>If threat level exceeds the threshold, the ProtocolGuard contract pauses the vulnerable protocol automatically.</p>
+            </div>
           </div>
-          <div className="pipeline-connector"><div className="connector-line" /></div>
-          <div className="pipeline-step">
-            <div className="pipeline-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+
+          <div className="pv-step">
+            <div className="pv-marker">
+              <div className="pv-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
             </div>
-            <div className="pipeline-num">05</div>
-            <h4>Reputation Update</h4>
-            <p>The detecting agent&apos;s on-chain reputation increases, advancing through Scout, Guardian, Warden, Overlord tiers.</p>
+            <div className="pv-content">
+              <div className="pv-num">05</div>
+              <h4>Reputation Update</h4>
+              <p>The detecting agent&apos;s on-chain reputation increases, advancing through Scout, Guardian, Warden, and Overlord tiers.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Architecture */}
+      {/* Architecture - Interactive */}
       <section className="section" id="architecture">
         <div className="reveal" ref={addRef}>
           <div className="section-label">Architecture</div>
           <div className="section-title">Full-stack 0G integration.</div>
           <div className="section-desc">
-            Every layer of the 0G modular stack is used for a specific purpose in the Hashly pipeline.
+            Every layer of the 0G modular stack is used for a specific purpose in the Hashly pipeline. Click a layer to learn more.
           </div>
         </div>
-        <div className="arch-image reveal" ref={addRef}>
-          <Image
-            src="/images/architecture.jpg"
-            alt="Hashly Architecture — Smart Contract monitoring flows through Sentinel Agent to 0G Compute for AI inference, then to 0G Storage for evidence and 0G Chain for circuit breaking"
-            width={900}
-            height={506}
-            style={{ width: "100%", height: "auto", borderRadius: 12, border: "1px solid var(--border)" }}
-          />
+        <div className="arch-interactive reveal" ref={addRef}>
+          <div className="arch-layers">
+            {archLayers.map((layer) => (
+              <button
+                key={layer.id}
+                className={`arch-layer ${activeArch === layer.id ? "active" : ""}`}
+                onClick={() => setActiveArch(activeArch === layer.id ? null : layer.id)}
+                style={{ "--layer-color": layer.color }}
+              >
+                <div className="arch-layer-icon">{layer.icon}</div>
+                <div className="arch-layer-name">{layer.name}</div>
+                <svg className="arch-layer-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            ))}
+          </div>
+          <div className="arch-detail-panel">
+            {activeArch ? (
+              <div className="arch-detail-content" key={activeArch}>
+                <div className="arch-detail-icon" style={{ color: archLayers.find(l => l.id === activeArch)?.color }}>
+                  {archLayers.find(l => l.id === activeArch)?.icon}
+                </div>
+                <h4>{archLayers.find(l => l.id === activeArch)?.name}</h4>
+                <p>{archLayers.find(l => l.id === activeArch)?.desc}</p>
+              </div>
+            ) : (
+              <div className="arch-detail-empty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="1.5" width="32" height="32"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <p>Select a layer to see how it fits into the Hashly pipeline</p>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -326,17 +413,17 @@ export default function LandingPage() {
         <div className="contracts-grid reveal" ref={addRef}>
           <a href="https://chainscan-galileo.0g.ai/address/0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE" target="_blank" rel="noopener noreferrer" className="contract-card">
             <div className="contract-name">SentinelRegistry</div>
-            <div className="contract-desc">ERC-7857 Agentic ID management — mint, transfer, and compose AI sentinel agents as on-chain NFTs.</div>
+            <div className="contract-desc">ERC-7857 Agentic ID management. Mint, transfer, and compose AI sentinel agents as on-chain NFTs.</div>
             <code className="contract-addr">0x01F9...4bcE</code>
           </a>
           <a href="https://chainscan-galileo.0g.ai/address/0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC" target="_blank" rel="noopener noreferrer" className="contract-card">
             <div className="contract-name">ProtocolGuard</div>
-            <div className="contract-desc">Circuit breaker controller — monitors threat levels and auto-pauses vulnerable protocols on detection.</div>
+            <div className="contract-desc">Circuit breaker controller. Monitors threat levels and auto-pauses vulnerable protocols on detection.</div>
             <code className="contract-addr">0x6224...3aFC</code>
           </a>
           <a href="https://chainscan-galileo.0g.ai/address/0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5" target="_blank" rel="noopener noreferrer" className="contract-card">
             <div className="contract-name">VulnerableVault</div>
-            <div className="contract-desc">Intentionally vulnerable demo contract — used to simulate exploit detection and circuit breaker response.</div>
+            <div className="contract-desc">Intentionally vulnerable demo contract used to simulate exploit detection and circuit breaker response.</div>
             <code className="contract-addr">0x6771...8C5</code>
           </a>
         </div>
@@ -348,7 +435,7 @@ export default function LandingPage() {
           <div className="section-label">Built on 0G</div>
           <div className="section-title">Every layer of 0G, purpose-built.</div>
           <div className="section-desc">
-            Hashly uses the full 0G modular stack — compute, storage, and chain — for verifiable AI-powered security.
+            Hashly uses the full 0G modular stack (compute, storage, and chain) for verifiable AI-powered security.
           </div>
         </div>
 
@@ -365,21 +452,21 @@ export default function LandingPage() {
               <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <div className="tech-card-name">0G Compute</div>
-            <div className="tech-card-desc">AI inference via Router API — Llama-4-Scout model classifies exploits in real-time with confidence scoring.</div>
+            <div className="tech-card-desc">AI inference via Router API. Llama-4-Scout model classifies exploits in real-time with confidence scoring.</div>
           </div>
           <div className="tech-card">
             <div className="tech-card-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
             </div>
             <div className="tech-card-name">0G Storage</div>
-            <div className="tech-card-desc">Immutable exploit evidence storage — detection traces hashed and stored via 0G Storage SDK.</div>
+            <div className="tech-card-desc">Immutable exploit evidence storage. Detection traces hashed and stored via 0G Storage SDK.</div>
           </div>
           <div className="tech-card">
             <div className="tech-card-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </div>
             <div className="tech-card-name">ERC-7857</div>
-            <div className="tech-card-desc">Agentic ID standard — tokenized AI agents with on-chain reputation, tier progression, and composability.</div>
+            <div className="tech-card-desc">Agentic ID standard. Tokenized AI agents with on-chain reputation, tier progression, and composability.</div>
           </div>
         </div>
       </section>
@@ -426,7 +513,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="footer-bottom">
-          Hashly — Built for the 0G x AKINDO AI DeFi Buildathon
+          Hashly | Built for the 0G x AKINDO AI DeFi Buildathon
         </div>
       </footer>
     </div>

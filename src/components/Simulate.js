@@ -31,7 +31,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
       await wait(700);
       addLog("Calling withdraw() with malicious fallback handler...");
       await wait(500);
-      addLog("Fallback re-entered withdraw() — state not yet updated");
+      addLog("Fallback re-entered withdraw()  - state not yet updated");
       await wait(400);
       addLog("ALERT: Reentrancy pattern detected by Sentinel #1", "alert");
       await wait(300);
@@ -46,29 +46,29 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           reentrantCalls: 3,
         },
         contractAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f8fEb3",
-        functionSignature: "withdraw(uint256) — reentrancy",
+        functionSignature: "withdraw(uint256)  - reentrancy",
       });
 
       if (result && !result.error) {
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
-        addLog(`Threat level: ${result.threatLevel}/10 — Source: ${result.source}`, "result");
+        addLog(`Threat level: ${result.threatLevel}/10  - Source: ${result.source}`, "result");
         addLog(`Model: ${result.model}`, "compute");
         await wait(400);
         addLog("Evidence hash stored on 0G Storage: 0x7f3a...e291", "storage");
         await wait(300);
 
         if (result.threatLevel >= 7) {
-          addLog("CIRCUIT BREAKER TRIGGERED — VulnerableVault paused", "block");
+          addLog("CIRCUIT BREAKER TRIGGERED  - VulnerableVault paused", "block");
           await wait(300);
           addLog("Sentinel #1 reputation updated: +50 points", "reward");
         } else {
           addLog("Threat level below auto-pause threshold. Alert logged.", "storage");
         }
       } else {
-        addLog("API call failed — using local classification fallback", "alert");
+        addLog("API call failed  - using local classification fallback", "alert");
         addLog("Classification: CRITICAL_REENTRANCY (local model)", "result");
         await wait(300);
-        addLog("CIRCUIT BREAKER TRIGGERED — VulnerableVault paused", "block");
+        addLog("CIRCUIT BREAKER TRIGGERED  - VulnerableVault paused", "block");
       }
 
       await wait(200);
@@ -97,24 +97,24 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           priceDeviation: "18.4%",
         },
         contractAddress: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
-        functionSignature: "flashLoan(uint256) — swap manipulation",
+        functionSignature: "flashLoan(uint256)  - swap manipulation",
       });
 
       if (result && !result.error) {
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
-        addLog(`Threat level: ${result.threatLevel}/10 — Source: ${result.source}`, "result");
+        addLog(`Threat level: ${result.threatLevel}/10  - Source: ${result.source}`, "result");
         addLog(`Model: ${result.model}`, "compute");
         await wait(400);
         addLog("Transaction trace and evidence stored on 0G Storage", "storage");
         await wait(300);
-        addLog("CIRCUIT BREAKER TRIGGERED — Target vault paused", "block");
+        addLog("CIRCUIT BREAKER TRIGGERED  - Target vault paused", "block");
         await wait(200);
         addLog("Flash loan repayment forced. Attack neutralized.", "reward");
       } else {
-        addLog("API call failed — using local classification fallback", "alert");
+        addLog("API call failed  - using local classification fallback", "alert");
         addLog("Classification: CRITICAL_FLASH_LOAN (local model)", "result");
         await wait(300);
-        addLog("CIRCUIT BREAKER TRIGGERED — Target vault paused", "block");
+        addLog("CIRCUIT BREAKER TRIGGERED  - Target vault paused", "block");
       }
 
       await wait(200);
@@ -213,7 +213,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
               <span /><span /><span />
             </div>
             <span className="terminal-title">
-              hashly — {stage === "idle" ? "ready" : stage}
+              hashly  - {stage === "idle" ? "ready" : stage}
             </span>
             {stage === "running" && (
               <span className="live-badge" style={{ marginLeft: "auto" }}>

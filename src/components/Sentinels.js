@@ -43,7 +43,7 @@ export default function Sentinels({ sentinels, setSentinels }) {
     <div className="fade-in">
       <div className="page-header">
         <h1 className="page-title">Sentinel Agents</h1>
-        <p className="page-desc">ERC-7857 Agentic IDs — autonomous security agents that evolve on-chain</p>
+        <p className="page-desc">ERC-7857 Agentic IDs  - autonomous security agents that evolve on-chain</p>
       </div>
 
       {/* Mint */}

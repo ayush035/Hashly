@@ -1,4 +1,4 @@
-// Contract ABIs — extracted from compiled artifacts
+// Contract ABIs  - extracted from compiled artifacts
 // These are the minimal ABIs needed for frontend interaction
 
 export const SENTINEL_REGISTRY_ABI = [
@@ -18,7 +18,7 @@ export const PROTOCOL_GUARD_ABI = [
   { anonymous: false, inputs: [{ indexed: true, name: "protocol", type: "address" }, { indexed: true, name: "alertId", type: "uint256" }, { indexed: true, name: "sentinelId", type: "uint256" }, { indexed: false, name: "threatLevel", type: "uint256" }], name: "CircuitBreakerTriggered", type: "event" },
 ];
 
-// Contract addresses — filled after deployment
+// Contract addresses  - filled after deployment
 export const CONTRACTS = {
   sentinelRegistry: process.env.NEXT_PUBLIC_SENTINEL_REGISTRY || "",
   protocolGuard: process.env.NEXT_PUBLIC_PROTOCOL_GUARD || "",

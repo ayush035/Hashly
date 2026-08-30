@@ -67,7 +67,7 @@ export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
     setAnalyzing(false);
   };
 
-  // Chart data — threat timeline (last 14 days)
+  // Chart data  - threat timeline (last 14 days)
   const timelineData = useMemo(() => {
     const days = [];
     for (let i = 13; i >= 0; i--) {
