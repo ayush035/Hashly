@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="public/logo.png" alt="Hashly Logo" width="120" />
+  <img src="public/logo.png" alt="Hashly Logo" width="110" />
 </p>
 
-# Hashly — Autonomous AI DeFi Security & Circuit Breaker Network
+# Hashly: Autonomous AI DeFi Security & Circuit Breaker Network
 
-> **Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time — tokenized as ERC-7857 Agentic IDs on 0G Network.**
+> Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time, tokenized as ERC-7857 Agentic IDs on 0G Network.
 
 [![0G Galileo Testnet](https://img.shields.io/badge/0G%20Chain-Galileo%20(16602)-indigo.svg)](https://chainscan-galileo.0g.ai)
 [![0G Compute](https://img.shields.io/badge/0G%20Compute-Verifiable%20AI-blue.svg)](https://docs.0g.ai)
@@ -12,100 +12,234 @@
 [![ERC-7857](https://img.shields.io/badge/Standard-ERC--7857%20Agentic%20ID-violet.svg)](https://eips.ethereum.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](LICENSE)
 
-Built for the **0G Bridge Buildathon by AKINDO** — Wave 1 Submission.
+Built for the **0G Bridge Buildathon by AKINDO** (Wave 1 Submission).
 
 ---
 
-## One-Liner Description
+## Quick Links
 
-**Hashly is an autonomous on-chain security network that intercepts DeFi exploits in real time using 0G Compute for AI threat classification, 0G Storage for immutable evidence anchoring, and ERC-7857 Agentic IDs for automated circuit breakers on 0G Chain.**
+- Live Application: [https://hashlybeta.vercel.app/](https://hashlybeta.vercel.app/)
+- Video Demonstration: [https://youtu.be/6OXf7KV6jTg](https://youtu.be/6OXf7KV6jTg)
+- GitHub Repository: [https://github.com/ayush035/Hashly](https://github.com/ayush035/Hashly)
+- 0G Galileo Block Explorer: [https://chainscan-galileo.0g.ai](https://chainscan-galileo.0g.ai)
 
 ---
 
-## Detailed Project Description
+## Tagline & Executive Summary
 
-DeFi exploits cause over **$2 Billion in losses annually**. When reentrancy, flash loan price manipulation, or oracle drift occurs, the attack executes in seconds. Traditional security solutions rely on off-chain human monitoring and alerts (Discord/Telegram bots) which take 15 to 45 minutes to triage — far too late to stop an exploit.
+**Tagline:** Autonomous AI Security and Instant Circuit Breakers for DeFi.
 
-**Hashly** replaces passive alerts with an autonomous, verifiable, closed-loop security infrastructure built natively on the **0G Network**:
+**One-Liner:** Hashly is an autonomous on-chain security network that intercepts DeFi exploits in real time using 0G Compute for AI threat classification, 0G Storage for immutable evidence anchoring, and ERC-7857 Agentic IDs for automated circuit breakers on 0G Chain.
 
-1. **Sub-Second Threat Classification (0G Compute):** Transaction execution traces (gas spikes, call stack depth, state delta anomalies) are classified in real time by decentralized AI models running on the **0G Compute Router**.
-2. **Immutable Forensic Storage (0G Storage):** Complete exploit telemetry, trace data, and model inference results are cryptographically hashed and anchored into **0G Storage** via the official 0G Storage TS-SDK.
-3. **Automated On-Chain Circuit Breakers (0G Chain):** If an exploit threat level exceeds safety thresholds ($\ge 7/10$), Hashly executes on-chain transaction calls to `ProtocolGuard.sol` on 0G Galileo Testnet, pausing the vulnerable contract instantly within the same execution block.
-4. **Decentralized Agentic Identities (ERC-7857):** Security agents are ownable, transferable, and evolving on-chain assets. Each Sentinel accumulates reputation on 0G Chain based on verified detections, advancing through tiers: **Scout $\to$ Guardian $\to$ Warden $\to$ Overlord**.
+---
+
+## The Problem It Solves
+
+Over $2 Billion is lost annually to smart contract exploits in DeFi. Reentrancy loops, flash loan price distortions, and oracle drift attacks execute in seconds. Existing security solutions rely on off-chain human monitoring and webhook alerts (like Discord or Telegram bots) that take 15 to 45 minutes to triage. By the time a human security engineer wakes up, reads the notification, and coordinates a multi-sig transaction to pause a contract, the liquidity is already drained.
+
+### Key Limitations in Current DeFi Security:
+1. Static Audits Cannot Stop Runtime Exploits: Audits evaluate code at deployment time; they cannot anticipate live economic exploits or novel zero-day attack vectors.
+2. Alerting Is Far Too Slow: Attackers drain pools in a single block (under 12 seconds). Human-in-the-loop response times (15 to 45 minutes) fail to prevent fund loss.
+3. Centralization Bottlenecks: Existing automated pause bots rely on centralized Web2 AWS lambdas holding private keys with zero transparency or verifiable proof.
+
+### The Hashly Solution:
+Hashly replaces passive off-chain alerts with an autonomous, verifiable, closed-loop cryptographic immune system. By combining decentralized AI inference on 0G Compute with sub-second circuit-breaker execution on 0G Chain and permanent forensic storage on 0G Storage, Hashly reduces response times from 30 minutes to under 2 seconds, stopping exploits before funds are drained.
 
 ---
 
 ## Full-Stack 0G Integration
 
-Hashly is built from the ground up to utilize all four core pillars of the 0G modular AI ecosystem:
+Hashly utilizes all four core pillars of the 0G modular AI ecosystem:
 
 ```mermaid
 flowchart TD
-    subgraph "1. 0G Compute Layer"
-        A["Mempool / Exploit Trace"] -->|Calldata & Execution Depth| B["0G Compute Router (qwen2.5-omni / Llama)"]
-        B -->|Threat Score & Reasoning| C["Verified Security Classification"]
+    subgraph ComputeLayer [1. 0G Compute Layer]
+        A[Mempool or Exploit Trace] -->|Calldata and Call Depth| B[0G Compute Router: qwen2.5-omni]
+        B -->|Structured Threat Evaluation| C[AI Classification Score: 1-10]
     end
 
-    subgraph "2. 0G Storage Layer"
-        C -->|Raw Trace & Telemetry| D["0G Storage TS SDK (Blob API)"]
-        D -->|Merkle Proof Root Hash| E["0G Decentralized Storage Node"]
+    subgraph StorageLayer [2. 0G Storage Layer]
+        C -->|Raw Forensic Telemetry| D[0G Storage TS-SDK]
+        D -->|Merkle Proof Root Hash| E[0G Decentralized Storage Node]
     end
 
-    subgraph "3. 0G Chain & Smart Contracts"
-        C -->|Threat Level >= 7/10| F["ProtocolGuard.raiseAlert()"]
-        F -->|Auto-Pause Target Vault| G["VulnerableVault.sol (Paused)"]
-        F -->|Reputation +1| H["SentinelRegistry.sol (ERC-7857)"]
+    subgraph ChainLayer [3. 0G Chain Smart Contracts]
+        C -->|Threat Level >= 7/10| F[ProtocolGuard.raiseAlert]
+        F -->|Emergency Auto-Pause| G[VulnerableVault.sol: Paused]
+        F -->|Increment Reputation Score| H[SentinelRegistry.sol: ERC-7857]
+    end
+
+    subgraph AgentLayer [4. ERC-7857 Agentic IDs]
+        H -->|Tokenized On-Chain Assets| I[Evolutionary Reputation Tiers: Scout to Overlord]
     end
 ```
 
+### Deep Breakdown of the 4 0G Technologies:
+
 | 0G Technology | Hashly Integration Details |
-|---|---|
-| **0G Compute Router** | Sub-second decentralized inference via OpenAI-compatible endpoint (`qwen2.5-omni` / Llama-4-Scout) to classify exploit signatures (reentrancy, flash loan manipulation, oracle drift, access control breaches). |
-| **0G Storage** | Uploads tamper-proof JSON evidence blobs containing raw execution traces, model reasoning, and timestamps using `@0gfoundation/0g-storage-ts-sdk`. Returns on-chain verifiable Merkle root hashes. |
-| **0G Chain (Galileo)** | High-throughput EVM blockchain (Chain ID `16602`) hosting `SentinelRegistry.sol`, `ProtocolGuard.sol`, and protected vaults with $<2\text{s}$ confirmation times. |
-| **ERC-7857 Standard** | On-chain Agentic IDs with dynamic metadata URIs, behavioral system prompts, security specializations, and on-chain reputation tiering. |
+|:---|:---|
+| 0G Chain (Galileo 16602) | High-speed EVM layer executing smart contracts (SentinelRegistry.sol, ProtocolGuard.sol, VulnerableVault.sol) with sub-2s block finality for instant emergency circuit breaking. |
+| 0G Compute Router | Sub-second decentralized inference via OpenAI-compatible endpoint (qwen2.5-omni) to classify exploit signatures (reentrancy, flash loan manipulation, oracle drift, access control breaches) with provider billing and verifiable execution trace telemetry. |
+| 0G Storage | Uploads tamper-proof JSON evidence blobs containing raw execution traces, model reasoning, and timestamps using @0gfoundation/0g-storage-ts-sdk. Returns on-chain verifiable Merkle root hashes. |
+| ERC-7857 Standard | On-chain Agentic IDs with dynamic metadata URIs, behavioral system prompts, security specializations, and on-chain reputation tiering (Scout -> Guardian -> Warden -> Overlord). |
 
 ---
 
-## Deployed Smart Contracts (0G Galileo Testnet — Chain ID: 16602)
+## End-to-End Exploit Lifecycle
 
-| Contract | Address on 0G Galileo | Description |
-|---|---|---|
-| **SentinelRegistry** (ERC-7857) | [`0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE`](https://chainscan-galileo.0g.ai/address/0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE) | Tokenized Agentic IDs with custom system prompts, specialization tracking, and on-chain reputation advancement. |
-| **ProtocolGuard** (Circuit Breaker) | [`0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC`](https://chainscan-galileo.0g.ai/address/0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC) | Autonomous security hub that verifies threats, triggers emergency circuit-breaker pauses on target contracts, and updates sentinel reputation. |
-| **VulnerableVault** (Demo Protocol) | [`0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5`](https://chainscan-galileo.0g.ai/address/0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5) | Live DeFi vault contract deployed on 0G Galileo containing a reentrancy vector to demonstrate active protection and autonomous pausing. |
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Attacker
+    participant Target as VulnerableVault.sol (0G Chain)
+    participant Sentinel as Sentinel Agent (ERC-7857)
+    participant Compute as 0G Compute Router
+    participant Storage as 0G Storage Node
+    participant Guard as ProtocolGuard.sol (0G Chain)
 
----
-
-## Buildathon Roadmap
-
-### Wave 1: Core Architecture & Live On-Chain Integration (Current)
-- [x] **Smart Contract Suite:** Deployed `SentinelRegistry` (ERC-7857), `ProtocolGuard`, and `VulnerableVault` to 0G Galileo Testnet.
-- [x] **0G Compute Integration:** Live zero-shot DeFi exploit classification via 0G Compute Router (`qwen2.5-omni` with usage/billing trace telemetry).
-- [x] **0G Storage Integration:** Live upload of forensic audit records and evidence JSONs via `@0gfoundation/0g-storage-ts-sdk`.
-- [x] **ERC-7857 Agent Minting:** Configurable on-chain agent deployment with custom security specialization (Reentrancy, Flash Loan, Oracle, Access Control) and system prompts.
-- [x] **Interactive Simulator:** End-to-end exploit simulator demonstrating mempool interception $\to$ 0G Compute $\to$ 0G Storage $\to$ On-chain circuit-breaker pause.
-- [x] **Production dApp:** Dark, institutional security interface built with Next.js 15, RainbowKit, Wagmi, and multi-RPC fallback support.
-
----
-
-### Wave 2: Swarm Consensus & Decentralized Sentinel Daemons
-- [ ] **Sentinel Swarm Consensus:** Multi-agent voting mechanism where $\ge 3$ independent Sentinel Agentic IDs must corroborate high-severity alerts before triggering global circuit breakers.
-- [ ] **Background Node Daemon (CLI / Docker):** Open-source headless sentinel runner (Rust/Node.js) that protocol operators can run locally to monitor mempool transactions via WebSocket RPC.
-- [ ] **Zk-Proof Verification on 0G:** Integrating zero-knowledge inference proofs verifying that 0G Compute model outputs have not been tampered with before triggering circuit breakers.
-- [ ] **Custom Protocol SDK (`@hashly/guard`):** A 1-line Solidity modifier `hashlyProtected` and npm package for third-party protocols on 0G to plug into the sentinel network.
+    Attacker->>Target: Exploit Transaction (Recursive Withdraw)
+    Target-->>Sentinel: Execution Trace (Gas Spike, Call Depth > 1)
+    Sentinel->>Compute: POST /v1/chat/completions (Raw EVM Trace)
+    Compute-->>Sentinel: 200 OK (CRITICAL_REENTRANCY, Score: 8/10, Reasoning)
+    Sentinel->>Storage: Upload JSON Evidence Blob (TS-SDK)
+    Storage-->>Sentinel: Merkle Root Hash (0x8fa9c7...)
+    Sentinel->>Guard: raiseAlert(target, score, evidenceRoot)
+    Guard->>Target: pause() [Circuit Breaker Tripped]
+    Guard->>Sentinel: Update Reputation (+1 Verified Detection)
+```
 
 ---
 
-### Wave 3: Cross-Chain Settlement & Agent Marketplace
-- [ ] **Cross-Chain Circuit Breakers:** Cross-chain messaging to allow Sentinels on 0G Network to trigger emergency pauses on Ethereum, Arbitrum, and Base.
-- [ ] **ERC-7857 Agent Marketplace:** Decentralized marketplace to buy, rent, stake, and compose high-reputation Sentinel agents.
-- [ ] **Bounty & Slash Staking:** Staking mechanism where sentinel operators stake $OG tokens to earn detection bounties and face slashing for unverified false alarms.
-- [ ] **Automated Exploit Patch Synthesizer:** AI-generated Solidity hot-fix patches stored on 0G Storage alongside exploit reports.
+## Deployed Smart Contracts (0G Galileo Testnet: Chain ID 16602)
+
+| Contract | Address on 0G Galileo | Explorer Link |
+|:---|:---|:---|
+| SentinelRegistry (ERC-7857) | `0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE` | [View on 0G Chainscan](https://chainscan-galileo.0g.ai/address/0x01F9d2D5A4eA2BA7139D599b4f6B6D06cCB34bcE) |
+| ProtocolGuard (Circuit Breaker) | `0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC` | [View on 0G Chainscan](https://chainscan-galileo.0g.ai/address/0x6224d82ab9bE92d4eCF116D8cafC13d078B83aFC) |
+| VulnerableVault (Demo Target) | `0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5` | [View on 0G Chainscan](https://chainscan-galileo.0g.ai/address/0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5) |
+
+### Smart Contract Function Specifications:
+
+#### 1. SentinelRegistry.sol (ERC-7857 Agentic ID Registry)
+- `mintSentinel(string name, string metadataURI)`: Mints a new Sentinel agent NFT on 0G Galileo, initializes reputation to Scout tier, and stores the encoded system prompt and specialization on-chain.
+- `recordDetection(uint256 tokenId)`: Called exclusively by ProtocolGuard when an alert is verified; increments the agent's detection count and advances its reputation tier.
+- `getSentinel(uint256 tokenId)`: Returns complete on-chain agent metadata including name, reputation score, tier enum, metadata URI, creation timestamp, and total detections.
+- `totalSentinels()`: Returns the total count of active on-chain sentinels for dynamic frontend hydration.
+- `setProtocolGuard(address _guard)`: Authorizes the ProtocolGuard contract to report verified threat detections.
+
+#### 2. ProtocolGuard.sol (Autonomous Circuit Breaker Hub)
+- `raiseAlert(address targetProtocol, uint8 threatLevel, string threatType, string evidenceHash, uint256 sentinelId)`: Dispatches an emergency threat alert. If `threatLevel >= 7`, automatically calls `pause()` on the target protocol's contract, logs the 0G Storage `evidenceHash`, and updates the sentinel's reputation.
+- `registerProtocol(address protocolAddress, string protocolName)`: Allows third-party DeFi protocols to register their contract addresses for active Sentinel protection and circuit-breaker integration.
+- `getAlert(bytes32 alertId)`: Fetches full on-chain alert parameters, including timestamp, target contract, threat severity, and 0G Storage proof hash.
+- `pauseProtocol(address protocolAddress)`: Manual fallback administrative circuit breaker for emergency protocol maintenance.
+
+#### 3. VulnerableVault.sol (Interactive Target Protocol)
+- `deposit()`: Accepts ETH/0G deposits and credits balances.
+- `withdraw(uint256 amount)`: Vulnerable withdrawal function lacking a reentrancy guard where state updates occur after external ether transfers, providing a live testbed for Sentinel reentrancy detection.
+- `pause()`: Emergency pause modifier restricted to ProtocolGuard or the owner; locks all deposits and withdrawals when a circuit breaker is tripped.
+- `unpause()`: Resumes normal operations after an incident is resolved.
 
 ---
 
-## Quickstart & Local Setup
+## Live 0G Compute Verification
+
+Here is an actual response from the 0G Compute Router (`qwen2.5-omni`) analyzing a synthetic reentrancy exploit payload:
+
+```json
+{
+  "classification": "CRITICAL_REENTRANCY",
+  "confidence": 0.95,
+  "threatLevel": 8,
+  "reasoning": "The function withdraw has multiple reentrancy calls detected within its execution flow.",
+  "0g_trace": {
+    "provider": "0xa48f01287233509FD694a22Bf840225062E67836",
+    "request_id": "6a10850b-207a-4b3f-b172-dc413fdf2ba9",
+    "total_cost": "700610000000000"
+  },
+  "model": "qwen2.5-omni",
+  "usage": {
+    "prompt_tokens": 42,
+    "completion_tokens": 86,
+    "total_tokens": 128
+  }
+}
+```
+
+---
+
+## Everything Built in Wave 1
+
+1. Smart Contract Suite:
+   - Full Solidity 0.8.20 suite implementing ERC-7857 Agentic IDs and emergency circuit breakers.
+   - Hardhat configuration and automated deployment scripts targeting 0G Galileo Testnet.
+   - Deployed and verified SentinelRegistry, ProtocolGuard, and VulnerableVault on 0G Galileo.
+
+2. 0G Compute Integration Pipeline:
+   - Decentralized AI analysis route (`/api/analyze`) querying 0G Compute Router.
+   - Zero-shot exploit classification for Reentrancy, Flash Loans, Oracle Manipulation, and Access Control.
+   - Verifiable trace extraction capturing 0G Node Provider address (`0xa48f...`), Request ID, Token breakdown, and Cost in a0gi.
+
+3. 0G Storage Integration:
+   - Integration with `@0gfoundation/0g-storage-ts-sdk` and 0G Galileo storage nodes (`/api/storage`).
+   - Buffer formatting and Merkle root generation for attack telemetry payloads.
+   - Immutable forensic anchoring returning permanent proof hashes.
+
+4. ERC-7857 Agent Management UI:
+   - Interactive Sentinel creation modal with custom Specialization, System Prompt, and Description fields.
+   - Base64 calldata URI encoding for rich metadata storage on 0G Chain.
+   - Real-time on-chain sentinel querying (`totalSentinels()` and `getSentinel()`) with zero hardcoded placeholder data.
+   - Dynamic visual reputation badges (Scout, Guardian, Warden, Overlord).
+
+5. Exploit Simulation Testbed:
+   - Interactive sandbox simulating real Reentrancy and Flash Loan attack vectors.
+   - Real-time streaming terminal displaying live logs across all four stages: Interception -> 0G Compute -> 0G Storage -> On-Chain Circuit Breaker.
+   - Live automated contract pausing on VulnerableVault.sol.
+
+6. Production Frontend Application:
+   - Minimalist, institutional dark HUD theme with custom CSS design tokens.
+   - Wagmi v2 and Viem v2 multi-RPC fallback configuration (`evmrpc-testnet.0g.ai`, Ankr, dRPC) with `batch: false`.
+   - Network mismatch detection with 1-click Switch to 0G Galileo helper.
+   - RainbowKit wallet connector for seamless EVM authentication.
+   - Telemetry HUD console on landing page featuring live vector matrix graphics.
+   - Dedicated branding with the custom Hashly Cyber Eye Shield logo across all navbars, sidebars, favicons, and metadata.
+
+---
+
+## Roadmap: Future Waves
+
+```mermaid
+timeline
+    title Hashly Evolution Roadmap
+    Wave 1 (Completed) : Smart Contract Suite on 0G Galileo
+                       : 0G Compute AI Classification
+                       : 0G Storage Evidence Blobs
+                       : ERC-7857 Agent Minting and Reputation
+                       : Interactive Exploit Simulator
+    Wave 2 (Next)      : Multi-Agent Swarm Consensus Voting
+                       : Headless Sentinel Node Daemon CLI and Docker
+                       : zk-Inference Proof Verification
+                       : 1-Line Solidity SDK: @hashly/guard
+    Wave 3 (Future)    : Cross-Chain Emergency Pauses for ETH, Arbitrum, Base
+                       : Decentralized ERC-7857 Agent Marketplace
+                       : OG Token Staking and Slashing Mechanism
+                       : AI Exploit Patch Synthesizer
+```
+
+### Wave 2: Swarm Consensus and Headless Sentinel Daemons
+- Multi-Agent Swarm Consensus: Implement threshold voting where at least 3 independent Sentinel agents must cross-verify an exploit before triggering a global protocol pause.
+- Headless Sentinel Node Daemon (CLI and Docker): Release an open-source background runner (Rust/Node.js) that node operators and protocol developers can run 24/7 to monitor mempool transactions via WebSocket RPC.
+- zk-Inference Verification: Integrate zero-knowledge proofs (zkML) on 0G to prove that the AI model execution on 0G Compute was unmodified before on-chain execution.
+- `@hashly/guard` SDK: A 1-line Solidity modifier (`modifier hashlyProtected`) for third-party DeFi protocols on 0G to instantly inherit autonomous circuit breaker protection.
+
+### Wave 3: Cross-Chain Settlement and Agent Marketplace
+- Cross-Chain Emergency Pauses: Utilize 0G cross-chain messaging to allow Sentinels on 0G Network to trigger emergency pauses on Ethereum Mainnet, Arbitrum, and Base.
+- Decentralized ERC-7857 Marketplace: Buy, rent, stake, and compose high-reputation Sentinel agents with on-chain revenue sharing.
+- $OG Staking and Slashing Mechanism: Require sentinels to stake $OG tokens to earn detection bounties, slashing stakes for unverified false alarms.
+- AI Exploit Patch Synthesizer: Automatically generate verified Solidity hot-fix pull requests and security patches stored on 0G Storage alongside incident reports.
+
+---
+
+## Local Setup & Quickstart
 
 ### Prerequisites
 - Node.js 20+
@@ -139,7 +273,7 @@ ZG_COMPUTE_BASE_URL=https://router-api-testnet.integratenetwork.work/v1
 # 0G Storage
 ZG_STORAGE_RPC=https://storage-testnet.0g.ai
 
-# Deployer Key (for automated backend alert triggering & storage gas)
+# Deployer Key (for backend alert execution and storage gas)
 PRIVATE_KEY=your_private_key
 
 # Contracts on 0G Galileo (Chain ID: 16602)
@@ -160,23 +294,23 @@ npm run dev
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
-| **Frontend Framework** | Next.js 15 (App Router, Turbopack) |
-| **Web3 & Wallet** | Wagmi v2, Viem v2, RainbowKit |
-| **AI Inference** | 0G Compute Router (`qwen2.5-omni` / Llama-4-Scout) |
-| **Data Storage** | 0G Decentralized Storage (`@0gfoundation/0g-storage-ts-sdk`) |
-| **Smart Contracts** | Solidity 0.8.20, Hardhat |
-| **Blockchain** | 0G Galileo Testnet (Chain ID `16602`) |
-| **Agent Token Standard** | ERC-7857 (Agentic IDs) |
+|:---|:---|
+| Frontend Framework | Next.js 15 (App Router, Turbopack) |
+| Web3 and Wallet | Wagmi v2, Viem v2, RainbowKit |
+| AI Inference | 0G Compute Router (qwen2.5-omni / Llama) |
+| Data Storage | 0G Decentralized Storage (@0gfoundation/0g-storage-ts-sdk) |
+| Smart Contracts | Solidity 0.8.20, Hardhat |
+| Blockchain | 0G Galileo Testnet (Chain ID: 16602) |
+| Agent Token Standard | ERC-7857 (Agentic IDs) |
 
 ---
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
-  Built with on <a href="https://0g.ai"><strong>0G Network</strong></a> for the <strong>0G Bridge Buildathon</strong>
+  Built on <a href="https://0g.ai"><strong>0G Network</strong></a> for the <strong>0G Bridge Buildathon</strong>
 </p>
