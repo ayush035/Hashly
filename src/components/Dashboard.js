@@ -6,6 +6,7 @@ import {
   PieChart, Pie, Cell,
   BarChart, Bar,
 } from "recharts";
+import { TIER_LABELS } from "@/lib/contracts";
 
 const CHART_COLORS = {
   indigo: "#6366f1",
@@ -35,11 +36,36 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
   const [stats, setStats] = useState({ blocked: 0, detected: 0, protocols: 0, uptime: 0 });
+  const [onChainStats, setOnChainStats] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [lastResult, setLastResult] = useState(null);
 
+  // Fetch real on-chain stats
   useEffect(() => {
-    const targets = { blocked: 142, detected: 1847, protocols: 23, uptime: 99.7 };
+    async function fetchStats() {
+      try {
+        const res = await fetch("/api/stats");
+        const data = await res.json();
+        if (data.totalAlerts !== undefined) {
+          setOnChainStats(data);
+        }
+      } catch {
+        // Stats endpoint not available, use defaults
+      }
+    }
+    fetchStats();
+  }, [threats]); // refetch when threats change (after simulation)
+
+  // Animate counters (blend real on-chain data with demo stats)
+  useEffect(() => {
+    const chainAlerts = onChainStats?.totalAlerts || 0;
+    const chainSentinels = onChainStats?.totalSentinels || 0;
+    const targets = {
+      blocked: chainAlerts + threats.filter(t => t.status === "blocked").length,
+      detected: chainAlerts + threats.length,
+      protocols: onChainStats?.protocolCount || 1,
+      uptime: 99.7,
+    };
     const steps = 30;
     let step = 0;
     const t = setInterval(() => {
@@ -54,7 +80,8 @@ export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
       if (step >= steps) clearInterval(t);
     }, 40);
     return () => clearInterval(t);
-  }, []);
+  }, [onChainStats, threats]);
+
 
   const runQuickAnalysis = async () => {
     setAnalyzing(true);
@@ -309,21 +336,28 @@ export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
               </span>
             </div>
             <div className="panel-body">
-              {sentinels.map((s) => (
-                <div key={s.id} className="threat-row">
-                  <div className="sentinel-icon" style={{ width: 28, height: 28 }}>
-                    <svg viewBox="0 0 24 24" style={{ width: 14, height: 14 }}>
-                      <circle cx="12" cy="12" r="3"/>
-                      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42"/>
-                    </svg>
+              {sentinels.map((s) => {
+                const tier = typeof s.tier === "number" ? TIER_LABELS[s.tier] : s.tier;
+                const rep = typeof s.reputation === "bigint" ? Number(s.reputation) : s.reputation;
+                const det = typeof s.totalDetections === "bigint" ? Number(s.totalDetections) : (s.totalDetections || s.detections || 0);
+                const statusLabel = typeof s.status === "number" ? (s.status === 0 ? "active" : "paused") : s.status;
+
+                return (
+                  <div key={s.id} className="threat-row">
+                    <div className="sentinel-icon" style={{ width: 28, height: 28 }}>
+                      <svg viewBox="0 0 24 24" style={{ width: 14, height: 14 }}>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42"/>
+                      </svg>
+                    </div>
+                    <div className="threat-body">
+                      <div className="threat-title">{s.name}</div>
+                      <div className="threat-sub">Rep {rep} · {det} det.</div>
+                    </div>
+                    <span className={`tag ${tier}`}>{tier}</span>
                   </div>
-                  <div className="threat-body">
-                    <div className="threat-title">{s.name}</div>
-                    <div className="threat-sub">Rep {s.reputation} · {s.detections} det.</div>
-                  </div>
-                  <span className={`tag ${s.tier}`}>{s.tier}</span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -352,13 +386,16 @@ export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
           <div className="panel">
             <div className="panel-header">
               <span className="panel-title">0G Stack</span>
+              {onChainStats && (
+                <span style={{ fontSize: 10, color: "var(--green)", fontFamily: "var(--mono)" }}>LIVE</span>
+              )}
             </div>
             <div className="panel-body padded">
               {[
-                { name: "0G Chain", detail: "Galileo Testnet", ok: true },
+                { name: "0G Chain", detail: onChainStats ? `${onChainStats.totalSentinels} sentinels, ${onChainStats.totalAlerts} alerts` : "Galileo Testnet", ok: true },
                 { name: "0G Compute", detail: "Router API", ok: true },
-                { name: "0G Storage", detail: "Exploit DB", ok: true },
-                { name: "Agentic ID", detail: "ERC-7857", ok: true },
+                { name: "0G Storage", detail: "Evidence DB", ok: true },
+                { name: "Circuit Breaker", detail: onChainStats?.isPaused ? "PAUSED" : "Armed", ok: !onChainStats?.isPaused },
               ].map((item) => (
                 <div key={item.name} className="integ-row">
                   <div>
@@ -366,7 +403,7 @@ export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
                     <div className="integ-detail">{item.detail}</div>
                   </div>
                   <span className={`tag ${item.ok ? "active" : "critical"}`}>
-                    {item.ok ? "connected" : "offline"}
+                    {item.ok ? "connected" : "triggered"}
                   </span>
                 </div>
               ))}

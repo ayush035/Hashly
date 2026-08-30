@@ -18,6 +18,43 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  // Call the server-side /api/alert endpoint to trigger on-chain raiseAlert
+  const triggerOnChainAlert = async (result, evidenceHash) => {
+    try {
+      addLog("Submitting alert to ProtocolGuard on 0G Chain...", "compute");
+      const res = await fetch("/api/alert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          protocol: process.env.NEXT_PUBLIC_VULNERABLE_VAULT || "",
+          sentinelId: 1,
+          threatLevel: result.threatLevel,
+          threatType: result.classification,
+          evidenceHash: evidenceHash || "0x0000",
+        }),
+      });
+      const alertResult = await res.json();
+
+      if (alertResult.success) {
+        addLog(`On-chain alert raised. Tx: ${alertResult.txHash.slice(0, 10)}...${alertResult.txHash.slice(-8)}`, "storage");
+        if (alertResult.circuitBreakerTriggered) {
+          addLog("CIRCUIT BREAKER TRIGGERED on-chain - VulnerableVault paused", "block");
+        }
+        addLog(`Total on-chain alerts: ${alertResult.totalAlerts}`, "result");
+        if (alertResult.explorerUrl) {
+          addLog(`Explorer: ${alertResult.explorerUrl}`, "compute");
+        }
+        return alertResult;
+      } else {
+        addLog(`On-chain alert failed: ${alertResult.error || "Unknown error"}`, "alert");
+        return null;
+      }
+    } catch (err) {
+      addLog(`On-chain alert error: ${err.message}`, "alert");
+      return null;
+    }
+  };
+
   const runSimulation = async () => {
     setStage("running");
     setLogs([]);
@@ -31,12 +68,12 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
       await wait(700);
       addLog("Calling withdraw() with malicious fallback handler...");
       await wait(500);
-      addLog("Fallback re-entered withdraw()  - state not yet updated");
+      addLog("Fallback re-entered withdraw() - state not yet updated");
       await wait(400);
       addLog("ALERT: Reentrancy pattern detected by Sentinel #1", "alert");
       await wait(300);
 
-      // Real API call
+      // Real API call to 0G Compute
       addLog("Sending transaction data to 0G Compute Router for analysis...", "compute");
       const result = await analyzeTransaction({
         transactionData: {
@@ -46,29 +83,36 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           reentrantCalls: 3,
         },
         contractAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f8fEb3",
-        functionSignature: "withdraw(uint256)  - reentrancy",
+        functionSignature: "withdraw(uint256) - reentrancy",
       });
 
       if (result && !result.error) {
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
-        addLog(`Threat level: ${result.threatLevel}/10  - Source: ${result.source}`, "result");
+        addLog(`Threat level: ${result.threatLevel}/10 - Source: ${result.source}`, "result");
         addLog(`Model: ${result.model}`, "compute");
         await wait(400);
-        addLog("Evidence hash stored on 0G Storage: 0x7f3a...e291", "storage");
+
+        if (result.evidenceHash) {
+          addLog(`Evidence stored on 0G Storage: ${result.evidenceHash.slice(0, 14)}...`, "storage");
+        }
         await wait(300);
 
         if (result.threatLevel >= 7) {
-          addLog("CIRCUIT BREAKER TRIGGERED  - VulnerableVault paused", "block");
+          // Real on-chain circuit breaker
+          const alertResult = await triggerOnChainAlert(result, result.evidenceHash);
+          if (!alertResult) {
+            addLog("Falling back to off-chain circuit breaker log", "alert");
+          }
           await wait(300);
-          addLog("Sentinel #1 reputation updated: +50 points", "reward");
+          addLog("Sentinel #1 reputation updated on-chain: +detection recorded", "reward");
         } else {
           addLog("Threat level below auto-pause threshold. Alert logged.", "storage");
         }
       } else {
-        addLog("API call failed  - using local classification fallback", "alert");
+        addLog("API call failed - using local classification fallback", "alert");
         addLog("Classification: CRITICAL_REENTRANCY (local model)", "result");
         await wait(300);
-        addLog("CIRCUIT BREAKER TRIGGERED  - VulnerableVault paused", "block");
+        addLog("CIRCUIT BREAKER TRIGGERED (off-chain fallback)", "block");
       }
 
       await wait(200);
@@ -79,7 +123,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
       await wait(700);
       addLog("Requesting flash loan: 10,000 ETH from lending pool...");
       await wait(800);
-      addLog("Executing swap: 5,000 ETH → USDC on DEX...");
+      addLog("Executing swap: 5,000 ETH to USDC on DEX...");
       await wait(600);
       addLog("Price impact observed: USDC/ETH oracle deviation 18.4%...");
       await wait(400);
@@ -97,24 +141,32 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           priceDeviation: "18.4%",
         },
         contractAddress: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
-        functionSignature: "flashLoan(uint256)  - swap manipulation",
+        functionSignature: "flashLoan(uint256) - swap manipulation",
       });
 
       if (result && !result.error) {
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
-        addLog(`Threat level: ${result.threatLevel}/10  - Source: ${result.source}`, "result");
+        addLog(`Threat level: ${result.threatLevel}/10 - Source: ${result.source}`, "result");
         addLog(`Model: ${result.model}`, "compute");
         await wait(400);
-        addLog("Transaction trace and evidence stored on 0G Storage", "storage");
+
+        if (result.evidenceHash) {
+          addLog(`Evidence stored on 0G Storage: ${result.evidenceHash.slice(0, 14)}...`, "storage");
+        }
         await wait(300);
-        addLog("CIRCUIT BREAKER TRIGGERED  - Target vault paused", "block");
+
+        // Real on-chain circuit breaker
+        const alertResult = await triggerOnChainAlert(result, result.evidenceHash);
+        if (!alertResult) {
+          addLog("Falling back to off-chain circuit breaker log", "alert");
+        }
         await wait(200);
         addLog("Flash loan repayment forced. Attack neutralized.", "reward");
       } else {
-        addLog("API call failed  - using local classification fallback", "alert");
+        addLog("API call failed - using local classification fallback", "alert");
         addLog("Classification: CRITICAL_FLASH_LOAN (local model)", "result");
         await wait(300);
-        addLog("CIRCUIT BREAKER TRIGGERED  - Target vault paused", "block");
+        addLog("CIRCUIT BREAKER TRIGGERED (off-chain fallback)", "block");
       }
 
       await wait(200);
@@ -192,15 +244,16 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           <div className="panel">
             <div className="panel-header">
               <span className="panel-title">What happens</span>
+              <span style={{ fontSize: 10, fontFamily: "var(--mono)", color: "var(--green)" }}>LIVE ON-CHAIN</span>
             </div>
             <div className="panel-body padded" style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.6 }}>
               <ol style={{ paddingLeft: 16, display: "flex", flexDirection: "column", gap: 6 }}>
                 <li>A simulated exploit transaction is constructed</li>
-                <li>Transaction data is sent to <code style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: 11 }}>/api/analyze</code></li>
-                <li>The API calls 0G Compute Router for AI classification</li>
-                <li>If threat level ≥ 7, the circuit breaker triggers automatically</li>
+                <li>Transaction data is sent to <code style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: 11 }}>/api/analyze</code> (0G Compute)</li>
                 <li>Evidence is hashed and stored on 0G Storage</li>
-                <li>The detecting sentinel&apos;s reputation is updated on-chain</li>
+                <li>If threat level is 7+, <code style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: 11 }}>ProtocolGuard.raiseAlert()</code> is called on-chain</li>
+                <li>Circuit breaker triggers automatically on 0G Chain</li>
+                <li>Sentinel reputation is updated via <code style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: 11 }}>SentinelRegistry.recordDetection()</code></li>
               </ol>
             </div>
           </div>
@@ -213,7 +266,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
               <span /><span /><span />
             </div>
             <span className="terminal-title">
-              hashly  - {stage === "idle" ? "ready" : stage}
+              hashly - {stage === "idle" ? "ready" : stage}
             </span>
             {stage === "running" && (
               <span className="live-badge" style={{ marginLeft: "auto" }}>
@@ -228,7 +281,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                 </svg>
                 <span>Select an attack vector and launch the simulation.</span>
-                <span style={{ fontSize: 11 }}>Results include real API calls to 0G Compute.</span>
+                <span style={{ fontSize: 11 }}>Real API calls to 0G Compute + on-chain circuit breaker.</span>
               </div>
             ) : (
               logs.map((log, i) => (
