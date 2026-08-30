@@ -12,7 +12,7 @@
 [![ERC-7857](https://img.shields.io/badge/Standard-ERC--7857%20Agentic%20ID-violet.svg)](https://eips.ethereum.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](LICENSE)
 
-Built for the **0G Bridge Buildathon by AKINDO** (Wave 1 Submission).
+Built for the **0G Bridge Buildathon by AKINDO** (Wave 3 Submission).
 
 ---
 
@@ -167,7 +167,7 @@ Here is an actual response from the 0G Compute Router (`qwen2.5-omni`) analyzing
 
 ---
 
-## Everything Built in Wave 1
+## Everything Built in Wave 3
 
 1. Smart Contract Suite:
    - Full Solidity 0.8.20 suite implementing ERC-7857 Agentic IDs and emergency circuit breakers.
@@ -210,28 +210,28 @@ Here is an actual response from the 0G Compute Router (`qwen2.5-omni`) analyzing
 ```mermaid
 timeline
     title Hashly Evolution Roadmap
-    Wave 1 (Completed) : Smart Contract Suite on 0G Galileo
+    Wave 3 (Current)  : Smart Contract Suite on 0G Galileo
                        : 0G Compute AI Classification
                        : 0G Storage Evidence Blobs
                        : ERC-7857 Agent Minting and Reputation
                        : Interactive Exploit Simulator
-    Wave 2 (Next)      : Multi-Agent Swarm Consensus Voting
+    Wave 4 (Next)      : Multi-Agent Swarm Consensus Voting
                        : Headless Sentinel Node Daemon CLI and Docker
                        : zk-Inference Proof Verification
                        : 1-Line Solidity SDK: @hashly/guard
-    Wave 3 (Future)    : Cross-Chain Emergency Pauses for ETH, Arbitrum, Base
+    Wave 5 (Future)    : Cross-Chain Emergency Pauses for ETH, Arbitrum, Base
                        : Decentralized ERC-7857 Agent Marketplace
                        : OG Token Staking and Slashing Mechanism
                        : AI Exploit Patch Synthesizer
 ```
 
-### Wave 2: Swarm Consensus and Headless Sentinel Daemons
+### Wave 4: Swarm Consensus and Headless Sentinel Daemons
 - Multi-Agent Swarm Consensus: Implement threshold voting where at least 3 independent Sentinel agents must cross-verify an exploit before triggering a global protocol pause.
 - Headless Sentinel Node Daemon (CLI and Docker): Release an open-source background runner (Rust/Node.js) that node operators and protocol developers can run 24/7 to monitor mempool transactions via WebSocket RPC.
 - zk-Inference Verification: Integrate zero-knowledge proofs (zkML) on 0G to prove that the AI model execution on 0G Compute was unmodified before on-chain execution.
 - `@hashly/guard` SDK: A 1-line Solidity modifier (`modifier hashlyProtected`) for third-party DeFi protocols on 0G to instantly inherit autonomous circuit breaker protection.
 
-### Wave 3: Cross-Chain Settlement and Agent Marketplace
+### Wave 5: Cross-Chain Settlement and Agent Marketplace
 - Cross-Chain Emergency Pauses: Utilize 0G cross-chain messaging to allow Sentinels on 0G Network to trigger emergency pauses on Ethereum Mainnet, Arbitrum, and Base.
 - Decentralized ERC-7857 Marketplace: Buy, rent, stake, and compose high-reputation Sentinel agents with on-chain revenue sharing.
 - $OG Staking and Slashing Mechanism: Require sentinels to stake $OG tokens to earn detection bounties, slashing stakes for unverified false alarms.
