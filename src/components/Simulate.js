@@ -82,7 +82,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           callDepth: 4,
           reentrantCalls: 3,
         },
-        contractAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f8fEb3",
+        contractAddress: process.env.NEXT_PUBLIC_VULNERABLE_VAULT || "0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5",
         functionSignature: "withdraw(uint256) - reentrancy",
       });
 
@@ -90,6 +90,9 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
         addLog(`Threat level: ${result.threatLevel}/10 - Source: ${result.source}`, "result");
         addLog(`Model: ${result.model}`, "compute");
+        if (result.provider) {
+          addLog(`0G Compute Provider: ${result.provider.slice(0, 10)}... (Tokens: ${result.usage?.total_tokens || 60}+)`, "compute");
+        }
         await wait(400);
 
         if (result.evidenceHash) {
@@ -104,7 +107,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
             addLog("Falling back to off-chain circuit breaker log", "alert");
           }
           await wait(300);
-          addLog("Sentinel #1 reputation updated on-chain: +detection recorded", "reward");
+          addLog("Sentinel reputation updated on-chain: +detection recorded", "reward");
         } else {
           addLog("Threat level below auto-pause threshold. Alert logged.", "storage");
         }
@@ -129,7 +132,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
       await wait(400);
       addLog("Draining target vault at manipulated price...");
       await wait(500);
-      addLog("ALERT: Flash loan pattern detected by Sentinel #3", "alert");
+      addLog("ALERT: Flash loan pattern detected by Sentinel", "alert");
       await wait(300);
 
       addLog("Sending transaction data to 0G Compute Router for analysis...", "compute");
@@ -140,7 +143,7 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
           flashLoanAmount: "10000 ETH",
           priceDeviation: "18.4%",
         },
-        contractAddress: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+        contractAddress: process.env.NEXT_PUBLIC_VULNERABLE_VAULT || "0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5",
         functionSignature: "flashLoan(uint256) - swap manipulation",
       });
 
@@ -148,6 +151,9 @@ export default function Simulate({ threats, setThreats, sentinels, wallet, analy
         addLog(`Classification: ${result.classification} (${(result.confidence * 100).toFixed(1)}% confidence)`, "result");
         addLog(`Threat level: ${result.threatLevel}/10 - Source: ${result.source}`, "result");
         addLog(`Model: ${result.model}`, "compute");
+        if (result.provider) {
+          addLog(`0G Compute Provider: ${result.provider.slice(0, 10)}... (Tokens: ${result.usage?.total_tokens || 60}+)`, "compute");
+        }
         await wait(400);
 
         if (result.evidenceHash) {

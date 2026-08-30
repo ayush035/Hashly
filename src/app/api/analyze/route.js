@@ -109,6 +109,10 @@ Check for reentrancy patterns, flash loan indicators, oracle manipulation, and a
       ...analysis,
       source: "0g-compute-live",
       model: data.model || usedModel,
+      usage: data.usage,
+      trace: data.x_0g_trace,
+      provider: data.x_0g_trace?.provider,
+      requestId: data.x_0g_trace?.request_id || data.id,
       timestamp: new Date().toISOString(),
     };
 
