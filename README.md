@@ -1,6 +1,6 @@
-# Hashly — Autonomous AI DeFi Security & Circuit Breaker Network
+# Hashly - Autonomous AI DeFi Security & Circuit Breaker Network
 
-> **Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time — tokenized as ERC-7857 Agentic IDs on 0G Network.**
+> **Autonomous AI security agents that detect, analyze, and neutralize DeFi smart contract exploits in real time, tokenized as ERC-7857 Agentic IDs on 0G Network.**
 
 [![0G Galileo Testnet](https://img.shields.io/badge/0G%20Chain-Galileo%20(16602)-indigo.svg)](https://chainscan-galileo.0g.ai)
 [![0G Compute](https://img.shields.io/badge/0G%20Compute-Verifiable%20AI-blue.svg)](https://docs.0g.ai)
@@ -75,7 +75,7 @@ flowchart TD
 
 ## 🗺️ Buildathon Roadmap
 
-### 🏆 Wave 1: Core Architecture & Live On-Chain Integration (Current)
+### Wave 1: Core Architecture & Live On-Chain Integration (Current)
 - [x] **Smart Contract Suite:** Deployed `SentinelRegistry` (ERC-7857), `ProtocolGuard`, and `VulnerableVault` to 0G Galileo Testnet.
 - [x] **0G Compute Integration:** Live zero-shot DeFi exploit classification via 0G Compute Router (`qwen2.5-omni` with usage/billing trace telemetry).
 - [x] **0G Storage Integration:** Live upload of forensic audit records and evidence JSONs via `@0gfoundation/0g-storage-ts-sdk`.
@@ -85,7 +85,7 @@ flowchart TD
 
 ---
 
-### 🚀 Wave 2: Swarm Consensus & Decentralized Sentinel Daemons
+### Wave 2: Swarm Consensus & Decentralized Sentinel Daemons
 - [ ] **Sentinel Swarm Consensus:** Multi-agent voting mechanism where $\ge 3$ independent Sentinel Agentic IDs must corroborate high-severity alerts before triggering global circuit breakers.
 - [ ] **Background Node Daemon (CLI / Docker):** Open-source headless sentinel runner (Rust/Node.js) that protocol operators can run locally to monitor mempool transactions via WebSocket RPC.
 - [ ] **Zk-Proof Verification on 0G:** Integrating zero-knowledge inference proofs verifying that 0G Compute model outputs have not been tampered with before triggering circuit breakers.
@@ -93,7 +93,7 @@ flowchart TD
 
 ---
 
-### 🌐 Wave 3: Cross-Chain Settlement & Agent Marketplace
+### Wave 3: Cross-Chain Settlement & Agent Marketplace
 - [ ] **Cross-Chain Circuit Breakers:** Cross-chain messaging to allow Sentinels on 0G Network to trigger emergency pauses on Ethereum, Arbitrum, and Base.
 - [ ] **ERC-7857 Agent Marketplace:** Decentralized marketplace to buy, rent, stake, and compose high-reputation Sentinel agents.
 - [ ] **Bounty & Slash Staking:** Staking mechanism where sentinel operators stake $OG tokens to earn detection bounties and face slashing for unverified false alarms.
@@ -101,7 +101,7 @@ flowchart TD
 
 ---
 
-## 💻 Quickstart & Local Setup
+## Quickstart & Local Setup
 
 ### Prerequisites
 - Node.js 20+
@@ -153,7 +153,7 @@ npm run dev
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -167,12 +167,12 @@ npm run dev
 
 ---
 
-## 📄 License
+## License
 
 MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
-  Built with 🛡️ on <a href="https://0g.ai"><strong>0G Network</strong></a> for the <strong>0G Bridge Buildathon</strong>
+  Built with on <a href="https://0g.ai"><strong>0G Network</strong></a> for the <strong>0G Bridge Buildathon</strong>
 </p>
