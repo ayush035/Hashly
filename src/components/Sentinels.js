@@ -6,10 +6,21 @@ import { SENTINEL_REGISTRY_ABI, CONTRACTS, TIER_LABELS, STATUS_LABELS } from "@/
 
 export default function Sentinels({ sentinels, setSentinels }) {
   const [mintName, setMintName] = useState("");
+  const [mintDesc, setMintDesc] = useState("");
+  const [mintSpec, setMintSpec] = useState("general");
+  const [mintPrompt, setMintPrompt] = useState("");
   const [txStatus, setTxStatus] = useState(""); // "", "pending", "confirming", "success", "error"
   const { address, isConnected } = useAccount();
 
   const registryAddr = CONTRACTS.sentinelRegistry;
+
+  const SPECIALIZATIONS = [
+    { value: "general", label: "General Security", desc: "Monitors all exploit vectors" },
+    { value: "reentrancy", label: "Reentrancy Detection", desc: "Specializes in recursive call patterns" },
+    { value: "flash_loan", label: "Flash Loan Defense", desc: "Detects atomic borrow-manipulate-repay" },
+    { value: "oracle", label: "Oracle Manipulation", desc: "Monitors price feed deviations" },
+    { value: "access_control", label: "Access Control", desc: "Watches for privilege escalation" },
+  ];
 
   // Write: mint sentinel
   const { writeContract, data: mintTxHash, isPending: isMintPending, error: mintError } = useWriteContract();
@@ -66,6 +77,9 @@ export default function Sentinels({ sentinels, setSentinels }) {
     if (isMintConfirmed) {
       setTxStatus("success");
       setMintName("");
+      setMintDesc("");
+      setMintPrompt("");
+      setMintSpec("general");
       // Refetch data after successful mint
       refetchTotal();
       refetchOwner();
@@ -91,16 +105,26 @@ export default function Sentinels({ sentinels, setSentinels }) {
   const handleMint = () => {
     if (!mintName.trim() || !isConnected || !registryAddr) return;
 
+    // Build metadata JSON as the URI
+    const metadata = {
+      name: mintName.trim(),
+      description: mintDesc.trim() || `${mintName.trim()} - Hashly security sentinel`,
+      specialization: mintSpec,
+      systemPrompt: mintPrompt.trim() || `You are ${mintName.trim()}, an autonomous DeFi security agent specialized in ${SPECIALIZATIONS.find(s => s.value === mintSpec)?.label || "general security"}. Monitor transactions for exploit patterns and report threats.`,
+      version: "hashly-v1",
+      created: new Date().toISOString(),
+    };
+
+    const metadataURI = `data:application/json;base64,${btoa(JSON.stringify(metadata))}`;
+
     setTxStatus("pending");
     writeContract({
       address: registryAddr,
       abi: SENTINEL_REGISTRY_ABI,
       functionName: "mintSentinel",
-      args: [mintName.trim(), `hashly://sentinel/${mintName.trim().toLowerCase()}`],
+      args: [mintName.trim(), metadataURI],
     });
   };
-
-  const tierOrder = { scout: 0, guardian: 1, warden: 2, overlord: 3 };
 
   return (
     <div className="fade-in">
@@ -118,9 +142,9 @@ export default function Sentinels({ sentinels, setSentinels }) {
           </span>
         </div>
         <div className="panel-body padded">
-          <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 14, lineHeight: 1.5 }}>
-            Create a new AI security sentinel as an on-chain Agentic ID. Each sentinel starts at the
-            Scout tier and advances through Guardian, Warden, and Overlord based on successful detections.
+          <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 16, lineHeight: 1.5 }}>
+            Configure and deploy a new AI security sentinel as an on-chain Agentic ID. Define its
+            specialization and system prompt to shape its threat detection behavior.
           </p>
           {!isConnected && (
             <p style={{ fontSize: 12, color: "var(--yellow)", marginBottom: 12 }}>
@@ -160,33 +184,92 @@ export default function Sentinels({ sentinels, setSentinels }) {
             </p>
           )}
 
-          <div style={{ display: "flex", gap: 10 }}>
-            <input
-              className="input"
-              type="text"
-              placeholder="Sentinel name"
-              value={mintName}
-              onChange={(e) => setMintName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleMint()}
-              style={{ flex: 1 }}
-              disabled={txStatus === "pending" || txStatus === "confirming"}
-            />
-            <button
-              className="btn btn-primary"
-              onClick={handleMint}
-              disabled={!isConnected || !mintName.trim() || txStatus === "pending" || txStatus === "confirming"}
-            >
-              {txStatus === "pending" ? "Confirm in wallet..." :
-               txStatus === "confirming" ? "Confirming..." :
-               "Deploy"}
-            </button>
-          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {/* Row 1: Name + Specialization */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div>
+                <label style={{ fontSize: 11, color: "var(--text-3)", display: "block", marginBottom: 4, fontWeight: 600 }}>
+                  Agent Name
+                </label>
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="e.g. Sentinel Alpha"
+                  value={mintName}
+                  onChange={(e) => setMintName(e.target.value)}
+                  style={{ width: "100%" }}
+                  disabled={txStatus === "pending" || txStatus === "confirming"}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: 11, color: "var(--text-3)", display: "block", marginBottom: 4, fontWeight: 600 }}>
+                  Specialization
+                </label>
+                <select
+                  className="input"
+                  value={mintSpec}
+                  onChange={(e) => setMintSpec(e.target.value)}
+                  style={{ width: "100%", cursor: "pointer" }}
+                  disabled={txStatus === "pending" || txStatus === "confirming"}
+                >
+                  {SPECIALIZATIONS.map(s => (
+                    <option key={s.value} value={s.value}>{s.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-          {totalCount !== undefined && (
-            <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 8, fontFamily: "var(--mono)" }}>
-              {Number(totalCount)} sentinels minted on-chain
-            </p>
-          )}
+            {/* Row 2: Description */}
+            <div>
+              <label style={{ fontSize: 11, color: "var(--text-3)", display: "block", marginBottom: 4, fontWeight: 600 }}>
+                Description
+              </label>
+              <input
+                className="input"
+                type="text"
+                placeholder="What does this sentinel monitor?"
+                value={mintDesc}
+                onChange={(e) => setMintDesc(e.target.value)}
+                style={{ width: "100%" }}
+                disabled={txStatus === "pending" || txStatus === "confirming"}
+              />
+            </div>
+
+            {/* Row 3: System Prompt */}
+            <div>
+              <label style={{ fontSize: 11, color: "var(--text-3)", display: "block", marginBottom: 4, fontWeight: 600 }}>
+                System Prompt <span style={{ fontWeight: 400, color: "var(--text-3)" }}>(optional - defines agent behavior)</span>
+              </label>
+              <textarea
+                className="input"
+                placeholder={`You are an autonomous DeFi security agent specialized in ${SPECIALIZATIONS.find(s => s.value === mintSpec)?.label || "general security"}. Monitor all transactions for exploit patterns and raise alerts when suspicious activity is detected.`}
+                value={mintPrompt}
+                onChange={(e) => setMintPrompt(e.target.value)}
+                rows={3}
+                style={{ width: "100%", resize: "vertical", fontFamily: "var(--mono)", fontSize: 11, lineHeight: 1.6 }}
+                disabled={txStatus === "pending" || txStatus === "confirming"}
+              />
+            </div>
+
+            {/* Deploy button */}
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button
+                className="btn btn-primary"
+                onClick={handleMint}
+                disabled={!isConnected || !mintName.trim() || txStatus === "pending" || txStatus === "confirming"}
+                style={{ minWidth: 140 }}
+              >
+                {txStatus === "pending" ? "Confirm in wallet..." :
+                 txStatus === "confirming" ? "Confirming..." :
+                 "Deploy Sentinel"}
+              </button>
+              {totalCount !== undefined && (
+                <span style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--mono)" }}>
+                  {Number(totalCount)} sentinels on-chain
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
