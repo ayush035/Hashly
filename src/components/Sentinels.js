@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAccount, useWriteContract, useReadContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWriteContract, useReadContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import { SENTINEL_REGISTRY_ABI, CONTRACTS, TIER_LABELS, STATUS_LABELS } from "@/lib/contracts";
 
 export default function Sentinels({ sentinels, setSentinels }) {
@@ -10,7 +10,8 @@ export default function Sentinels({ sentinels, setSentinels }) {
   const [mintSpec, setMintSpec] = useState("general");
   const [mintPrompt, setMintPrompt] = useState("");
   const [txStatus, setTxStatus] = useState(""); // "", "pending", "confirming", "success", "error"
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
 
   const registryAddr = CONTRACTS.sentinelRegistry;
 
@@ -102,8 +103,17 @@ export default function Sentinels({ sentinels, setSentinels }) {
     else if (isConfirming) setTxStatus("confirming");
   }, [isMintPending, isConfirming]);
 
-  const handleMint = () => {
+  const handleMint = async () => {
     if (!mintName.trim() || !isConnected || !registryAddr) return;
+
+    if (chain && chain.id !== 16602 && switchChain) {
+      try {
+        await switchChain({ chainId: 16602 });
+      } catch (err) {
+        console.error("Network switch rejected:", err);
+        return;
+      }
+    }
 
     // Build metadata JSON as the URI
     const metadata = {
@@ -123,6 +133,7 @@ export default function Sentinels({ sentinels, setSentinels }) {
       abi: SENTINEL_REGISTRY_ABI,
       functionName: "mintSentinel",
       args: [mintName.trim(), metadataURI],
+      chainId: 16602,
     });
   };
 
@@ -152,6 +163,31 @@ export default function Sentinels({ sentinels, setSentinels }) {
             </p>
           )}
 
+          {isConnected && chain && chain.id !== 16602 && (
+            <div style={{
+              background: "rgba(239, 68, 68, 0.1)",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
+              borderRadius: 8,
+              padding: "10px 14px",
+              marginBottom: 14,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 10
+            }}>
+              <span style={{ fontSize: 12, color: "var(--red)" }}>
+                Wrong Network: Connected to <strong>{chain.name || `Chain #${chain.id}`}</strong>. Please switch to 0G Galileo Testnet (Chain ID 16602).
+              </span>
+              <button
+                className="btn btn-primary"
+                style={{ padding: "4px 12px", fontSize: 12, flexShrink: 0 }}
+                onClick={() => switchChain?.({ chainId: 16602 })}
+              >
+                Switch to 0G
+              </button>
+            </div>
+          )}
+
           {/* Status messages */}
           {txStatus === "pending" && (
             <p style={{ fontSize: 12, color: "var(--accent)", marginBottom: 12, fontFamily: "var(--mono)" }}>
@@ -179,9 +215,18 @@ export default function Sentinels({ sentinels, setSentinels }) {
             </p>
           )}
           {txStatus === "error" && (
-            <p style={{ fontSize: 12, color: "var(--red)", marginBottom: 12, fontFamily: "var(--mono)" }}>
-              Mint failed. {mintError?.shortMessage || "Check console for details."}
-            </p>
+            <div style={{ marginBottom: 12, fontSize: 12, color: "var(--red)", fontFamily: "var(--mono)" }}>
+              <p>Mint failed: {mintError?.shortMessage || mintError?.message || "Transaction error. Ensure you are on 0G Galileo Testnet."}</p>
+              {chain && chain.id !== 16602 && (
+                <button
+                  className="btn btn-outline"
+                  style={{ marginTop: 8, fontSize: 11 }}
+                  onClick={() => switchChain?.({ chainId: 16602 })}
+                >
+                  Switch Network to 0G Galileo
+                </button>
+              )}
+            </div>
           )}
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>

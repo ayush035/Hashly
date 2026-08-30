@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function LandingPage() {
   const revealRefs = useRef([]);
@@ -136,21 +135,12 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero with background image */}
+      {/* Hero section */}
       <section className="hero">
-        <div className="hero-bg-image">
-          <Image
-            src="/images/hero-bg.jpg"
-            alt=""
-            fill
-            priority
-            style={{ objectFit: "cover", opacity: 0.35 }}
-          />
-        </div>
         <div className="hero-content">
           <div className="hero-eyebrow">
             <span className="eyebrow-dot" />
-            Built on 0G Network
+            Built on 0G Network · Verifiable AI Security
           </div>
           <h1>
             DeFi security that<br />
@@ -167,14 +157,62 @@ export default function LandingPage() {
               View Source
             </a>
           </div>
-          <div className="hero-shield">
-            <Image
-              src="/images/shield.jpg"
-              alt="Hashly AI Shield"
-              width={280}
-              height={280}
-              style={{ borderRadius: 16, filter: "drop-shadow(0 0 40px rgba(99,102,241,0.3))" }}
-            />
+
+          {/* Minimalist Live Security Console (Replaces generic AI image) */}
+          <div className="hero-console">
+            <div className="console-header">
+              <div className="console-dots">
+                <span className="dot dot-red" />
+                <span className="dot dot-yellow" />
+                <span className="dot dot-green" />
+              </div>
+              <div className="console-title">HASHLY // AUTONOMOUS_SENTINEL_NODE</div>
+              <div className="console-badge">
+                <span className="live-dot" />
+                0G GALILEO · 16602
+              </div>
+            </div>
+
+            <div className="console-grid">
+              <div className="c-item">
+                <div className="c-label">INFERENCE ENGINE</div>
+                <div className="c-val text-green">0G Compute Router</div>
+                <div className="c-sub">Llama-4-Scout · &lt;2s</div>
+              </div>
+              <div className="c-item">
+                <div className="c-label">CIRCUIT BREAKER</div>
+                <div className="c-val text-accent">ProtocolGuard</div>
+                <div className="c-sub">Auto-Pause Threat ≥ 7</div>
+              </div>
+              <div className="c-item">
+                <div className="c-label">IMMUTABLE LOGS</div>
+                <div className="c-val text-indigo">0G Storage Flow</div>
+                <div className="c-sub">Merkle Proof Anchors</div>
+              </div>
+              <div className="c-item">
+                <div className="c-label">AGENTIC IDS</div>
+                <div className="c-val text-cyan">ERC-7857</div>
+                <div className="c-sub">On-Chain Reputation</div>
+              </div>
+            </div>
+
+            <div className="console-stream">
+              <div className="stream-line">
+                <span className="s-time">16:42:01</span>
+                <span className="s-tag tag-sys">SYS</span>
+                <span className="s-text">Sentinel telemetry initialized on 0G Galileo Testnet</span>
+              </div>
+              <div className="stream-line">
+                <span className="s-time">16:42:03</span>
+                <span className="s-tag tag-ai">0G-AI</span>
+                <span className="s-text">Verifiable exploit classification active · 4 vectors</span>
+              </div>
+              <div className="stream-line">
+                <span className="s-time">16:42:05</span>
+                <span className="s-tag tag-guard">GUARD</span>
+                <span className="s-text">ProtocolGuard armed: Target 0x6771...7908C5 protected</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
