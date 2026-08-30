@@ -15,11 +15,18 @@ export default function DashboardPage() {
   const { address: wallet, isConnected } = useAccount();
 
   useEffect(() => {
-    setSentinels([
-      { id: 1, name: "Alpha", tier: "guardian", reputation: 340, detections: 47, falsePositives: 2, status: "active", lastActive: "2m ago" },
-      { id: 2, name: "Omega", tier: "scout", reputation: 185, detections: 23, falsePositives: 1, status: "active", lastActive: "5m ago" },
-      { id: 3, name: "Phantom", tier: "warden", reputation: 620, detections: 89, falsePositives: 3, status: "active", lastActive: "1m ago" },
-    ]);
+    async function loadOnChainSentinels() {
+      try {
+        const res = await fetch("/api/sentinel");
+        const data = await res.json();
+        if (data.sentinels) {
+          setSentinels(data.sentinels);
+        }
+      } catch (err) {
+        console.error("Failed to load on-chain sentinels:", err);
+      }
+    }
+    loadOnChainSentinels();
   }, []);
 
   const analyzeTransaction = useCallback(async (txData) => {

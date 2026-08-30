@@ -319,68 +319,83 @@ export default function Sentinels({ sentinels, setSentinels }) {
       </div>
 
       {/* Cards */}
-      <div className="grid-3col">
-        {sentinels.map((s) => {
-          const tier = typeof s.tier === "number" ? TIER_LABELS[s.tier] : s.tier;
-          const status = typeof s.status === "number" ? STATUS_LABELS[s.status] : s.status;
-          const rep = typeof s.reputation === "bigint" ? Number(s.reputation) : s.reputation;
-          const detections = typeof s.totalDetections === "bigint" ? Number(s.totalDetections) : (s.totalDetections || s.detections || 0);
-          const fp = typeof s.falsePositives === "bigint" ? Number(s.falsePositives) : s.falsePositives;
+      {sentinels.length === 0 ? (
+        <div className="panel">
+          <div className="empty-state" style={{ padding: "48px 24px" }}>
+            <svg viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" style={{ width: 36, height: 36, opacity: 0.35, marginBottom: 8 }}>
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-1)", marginBottom: 4 }}>No Sentinel Agents Found</span>
+            <span style={{ fontSize: 12, color: "var(--text-3)", maxWidth: 420 }}>
+              Deploy your first ERC-7857 Sentinel Agent above to begin autonomous threat monitoring on 0G Galileo.
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div className="grid-3col">
+          {sentinels.map((s) => {
+            const tier = typeof s.tier === "number" ? TIER_LABELS[s.tier] : s.tier;
+            const status = typeof s.status === "number" ? STATUS_LABELS[s.status] : s.status;
+            const rep = typeof s.reputation === "bigint" ? Number(s.reputation) : s.reputation;
+            const detections = typeof s.totalDetections === "bigint" ? Number(s.totalDetections) : (s.totalDetections || s.detections || 0);
+            const fp = typeof s.falsePositives === "bigint" ? Number(s.falsePositives) : s.falsePositives;
 
-          return (
-            <div className="sentinel-card" key={s.id}>
-              <div className="sentinel-top">
-                <div className="sentinel-icon">
-                  <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                  </svg>
+            return (
+              <div className="sentinel-card" key={s.id}>
+                <div className="sentinel-top">
+                  <div className="sentinel-icon">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                  </div>
+                  <span className={`tag ${tier}`}>{tier}</span>
                 </div>
-                <span className={`tag ${tier}`}>{tier}</span>
-              </div>
 
-              <div className="sentinel-name">{s.name}</div>
-              <div className="sentinel-id">Agentic ID #{typeof s.id === "bigint" ? Number(s.id) : s.id}</div>
+                <div className="sentinel-name">{s.name}</div>
+                <div className="sentinel-id">Agentic ID #{typeof s.id === "bigint" ? Number(s.id) : s.id}</div>
 
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--text-3)", marginBottom: 4 }}>
-                  <span>Reputation</span>
-                  <span style={{ fontFamily: "var(--mono)" }}>{rep}</span>
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--text-3)", marginBottom: 4 }}>
+                    <span>Reputation</span>
+                    <span style={{ fontFamily: "var(--mono)" }}>{rep}</span>
+                  </div>
+                  <div className="progress">
+                    <div className="progress-fill" style={{ width: `${Math.min(rep / 10, 100)}%` }} />
+                  </div>
                 </div>
-                <div className="progress">
-                  <div className="progress-fill" style={{ width: `${Math.min(rep / 10, 100)}%` }} />
-                </div>
-              </div>
 
-              <div className="sentinel-stats-grid">
-                <div className="s-stat">
-                  <div className="s-stat-label">Detections</div>
-                  <div className="s-stat-value">{detections}</div>
+                <div className="sentinel-stats-grid">
+                  <div className="s-stat">
+                    <div className="s-stat-label">Detections</div>
+                    <div className="s-stat-value">{detections}</div>
+                  </div>
+                  <div className="s-stat">
+                    <div className="s-stat-label">False Pos</div>
+                    <div className="s-stat-value">{fp}</div>
+                  </div>
                 </div>
-                <div className="s-stat">
-                  <div className="s-stat-label">False Pos</div>
-                  <div className="s-stat-value">{fp}</div>
-                </div>
-              </div>
 
-              <div style={{
-                display: "flex", justifyContent: "space-between", alignItems: "center",
-                paddingTop: 10, borderTop: "1px solid var(--border)", marginTop: 10,
-              }}>
-                <span style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--mono)" }}>
-                  {s.lastActive || (s.lastActiveAt ? new Date(Number(s.lastActiveAt) * 1000).toLocaleString() : "on-chain")}
-                </span>
-                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <span className="status-dot" />
-                  <span style={{ fontSize: 10, fontWeight: 600, color: status === "active" ? "var(--green)" : "var(--yellow)", fontFamily: "var(--mono)" }}>
-                    {status === "active" ? "ONLINE" : status?.toUpperCase()}
+                <div style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  paddingTop: 10, borderTop: "1px solid var(--border)", marginTop: 10,
+                }}>
+                  <span style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--mono)" }}>
+                    {s.lastActive || (s.lastActiveAt ? new Date(Number(s.lastActiveAt) * 1000).toLocaleString() : "on-chain")}
                   </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <span className="status-dot" />
+                    <span style={{ fontSize: 10, fontWeight: 600, color: status === "active" ? "var(--green)" : "var(--yellow)", fontFamily: "var(--mono)" }}>
+                      {status === "active" ? "ONLINE" : status?.toUpperCase()}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -336,28 +336,34 @@ export default function Dashboard({ threats, sentinels, analyzeTransaction }) {
               </span>
             </div>
             <div className="panel-body">
-              {sentinels.map((s) => {
-                const tier = typeof s.tier === "number" ? TIER_LABELS[s.tier] : s.tier;
-                const rep = typeof s.reputation === "bigint" ? Number(s.reputation) : s.reputation;
-                const det = typeof s.totalDetections === "bigint" ? Number(s.totalDetections) : (s.totalDetections || s.detections || 0);
-                const statusLabel = typeof s.status === "number" ? (s.status === 0 ? "active" : "paused") : s.status;
+              {sentinels.length === 0 ? (
+                <div style={{ padding: "20px 14px", textAlign: "center", color: "var(--text-3)", fontSize: 12 }}>
+                  No active sentinels deployed yet
+                </div>
+              ) : (
+                sentinels.map((s) => {
+                  const tier = typeof s.tier === "number" ? TIER_LABELS[s.tier] : s.tier;
+                  const rep = typeof s.reputation === "bigint" ? Number(s.reputation) : s.reputation;
+                  const det = typeof s.totalDetections === "bigint" ? Number(s.totalDetections) : (s.totalDetections || s.detections || 0);
+                  const statusLabel = typeof s.status === "number" ? (s.status === 0 ? "active" : "paused") : s.status;
 
-                return (
-                  <div key={s.id} className="threat-row">
-                    <div className="sentinel-icon" style={{ width: 28, height: 28 }}>
-                      <svg viewBox="0 0 24 24" style={{ width: 14, height: 14 }}>
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42"/>
-                      </svg>
+                  return (
+                    <div key={s.id} className="threat-row">
+                      <div className="sentinel-icon" style={{ width: 28, height: 28 }}>
+                        <svg viewBox="0 0 24 24" style={{ width: 14, height: 14 }}>
+                          <circle cx="12" cy="12" r="3"/>
+                          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42"/>
+                        </svg>
+                      </div>
+                      <div className="threat-body">
+                        <div className="threat-title">{s.name}</div>
+                        <div className="threat-sub">Rep {rep} · {det} det.</div>
+                      </div>
+                      <span className={`tag ${tier}`}>{tier}</span>
                     </div>
-                    <div className="threat-body">
-                      <div className="threat-title">{s.name}</div>
-                      <div className="threat-sub">Rep {rep} · {det} det.</div>
-                    </div>
-                    <span className={`tag ${tier}`}>{tier}</span>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
 

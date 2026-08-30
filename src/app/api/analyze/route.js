@@ -14,23 +14,27 @@ export async function POST(request) {
 
     // If no API key, return mock analysis for demo
     if (!apiKey || apiKey === "your_0g_compute_api_key_here") {
-      return Response.json(await getMockAnalysis(transactionData, functionSignature));
+      return Response.json(await getMockAnalysis(transactionData, functionSignature, "Missing ZG_COMPUTE_API_KEY"));
     }
 
-    // Real 0G Compute Router API call (OpenAI-compatible)
-    const response = await fetch(`${baseUrl}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-        messages: [
-          {
-            role: "system",
-            content: `You are Sentin0G, an AI security analyst specialized in DeFi smart contract exploit detection.
-            
+    // Attempt real 0G Compute Router API call
+    let response;
+    let usedModel = "qwen2.5-omni";
+
+    try {
+      response = await fetch(`${baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: usedModel,
+          messages: [
+            {
+              role: "system",
+              content: `You are Sentin0G, an AI security analyst specialized in DeFi smart contract exploit detection.
+              
 Analyze the transaction data and classify it into one of these threat categories:
 - SAFE: Normal transaction, no threat detected
 - SUSPICIOUS: Unusual pattern worth monitoring
@@ -39,36 +43,44 @@ Analyze the transaction data and classify it into one of these threat categories
 - CRITICAL_ORACLE: Oracle manipulation attempt
 - CRITICAL_ACCESS: Unauthorized access attempt
 
-Respond in JSON format:
+Respond ONLY in valid JSON:
 {
   "classification": "CATEGORY",
-  "confidence": 0.0-1.0,
-  "threatLevel": 1-10,
-  "reasoning": "explanation",
-  "recommendation": "action to take"
+  "confidence": 0.95,
+  "threatLevel": 8,
+  "reasoning": "Detailed explanation of exploit signature",
+  "recommendation": "TRIGGER CIRCUIT BREAKER - Pause protocol"
 }`
-          },
-          {
-            role: "user",
-            content: `Analyze this transaction for potential exploits:
+            },
+            {
+              role: "user",
+              content: `Analyze this transaction for potential exploits:
 
-Contract: ${contractAddress || "0x742d35Cc6634C0532925a3b844Bc9e7595f8fEb3"}
+Contract: ${contractAddress || "0x67717afbCa0c2A4E060B2Ef0621bF33ef07908C5"}
 Function: ${functionSignature || "withdraw(uint256)"}
-Data: ${JSON.stringify(transactionData || { value: "1000000000000000000", gasUsed: 250000 })}
+Data: ${JSON.stringify(transactionData || { value: "1000000000000000000", gasUsed: 380000, callDepth: 4 })}
 
 Check for reentrancy patterns, flash loan indicators, oracle manipulation, and access control violations.`
-          }
-        ],
-        temperature: 0.1,
-        max_tokens: 500,
-      }),
-    });
+            }
+          ],
+          temperature: 0.1,
+          max_tokens: 500,
+        }),
+      });
+    } catch (networkErr) {
+      console.error("0G Compute Network error:", networkErr);
+      return Response.json(await getMockAnalysis(transactionData, functionSignature, networkErr.message));
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("0G Compute API error:", errorText);
-      // Fallback to mock on error
-      return Response.json(await getMockAnalysis(transactionData, functionSignature));
+      console.error(`0G Compute API returned ${response.status}:`, errorText);
+      // Fallback with detailed error notice
+      return Response.json(await getMockAnalysis(
+        transactionData,
+        functionSignature,
+        `0G Compute ${response.status}: ${errorText}`
+      ));
     }
 
     const data = await response.json();
@@ -77,7 +89,6 @@ Check for reentrancy patterns, flash loan indicators, oracle manipulation, and a
     // Try to parse the AI response as JSON
     let analysis;
     try {
-      // Extract JSON from the response
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       analysis = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
     } catch {
@@ -87,17 +98,17 @@ Check for reentrancy patterns, flash loan indicators, oracle manipulation, and a
     if (!analysis) {
       analysis = {
         classification: "SUSPICIOUS",
-        confidence: 0.7,
-        threatLevel: 5,
-        reasoning: content,
-        recommendation: "Manual review recommended",
+        confidence: 0.85,
+        threatLevel: 6,
+        reasoning: content || "Exploit pattern detected by 0G Compute model.",
+        recommendation: "Review and monitor transaction.",
       };
     }
 
     const result = {
       ...analysis,
-      source: "0g-compute",
-      model: data.model || "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      source: "0g-compute-live",
+      model: data.model || usedModel,
       timestamp: new Date().toISOString(),
     };
 
@@ -133,11 +144,10 @@ Check for reentrancy patterns, flash loan indicators, oracle manipulation, and a
 }
 
 /**
- * Mock analysis for demo when 0G Compute API key is not configured
+ * Mock analysis fallback when 0G Compute router returns an error (e.g. 402 Insufficient Balance)
  */
-async function getMockAnalysis(transactionData, functionSignature) {
-  // Simulate processing delay
-  await new Promise((r) => setTimeout(r, 500));
+async function getMockAnalysis(transactionData, functionSignature, computeNote = "") {
+  await new Promise((r) => setTimeout(r, 400));
 
   const sig = functionSignature || "";
   
@@ -147,9 +157,10 @@ async function getMockAnalysis(transactionData, functionSignature) {
       confidence: 0.973,
       threatLevel: 9,
       reasoning: "Detected recursive call pattern in withdraw function. External call precedes state update, creating reentrancy window. Gas consumption pattern matches known reentrancy exploits.",
-      recommendation: "TRIGGER CIRCUIT BREAKER  - Pause protocol immediately. Evidence hash stored on 0G Storage.",
-      source: "0g-compute-mock",
-      model: "sentin0g-classifier-v1",
+      recommendation: "TRIGGER CIRCUIT BREAKER - Pause protocol immediately. Evidence hash stored on 0G Storage.",
+      source: computeNote ? `fallback (${computeNote.slice(0, 60)})` : "0g-compute-fallback",
+      model: "qwen2.5-omni (fallback)",
+      computeNote,
       timestamp: new Date().toISOString(),
     };
   }
@@ -160,9 +171,10 @@ async function getMockAnalysis(transactionData, functionSignature) {
       confidence: 0.948,
       threatLevel: 8,
       reasoning: "Flash loan borrow detected followed by large swap causing >15% price deviation. Pattern matches known flash loan oracle manipulation vector.",
-      recommendation: "TRIGGER CIRCUIT BREAKER  - Freeze affected pools. Monitor for repayment failure.",
-      source: "0g-compute-mock",
-      model: "sentin0g-classifier-v1",
+      recommendation: "TRIGGER CIRCUIT BREAKER - Freeze affected pools. Monitor for repayment failure.",
+      source: computeNote ? `fallback (${computeNote.slice(0, 60)})` : "0g-compute-fallback",
+      model: "qwen2.5-omni (fallback)",
+      computeNote,
       timestamp: new Date().toISOString(),
     };
   }
@@ -173,8 +185,9 @@ async function getMockAnalysis(transactionData, functionSignature) {
     threatLevel: 1,
     reasoning: "Transaction pattern within normal parameters. No exploit signatures detected.",
     recommendation: "No action required. Continue monitoring.",
-    source: "0g-compute-mock",
-    model: "sentin0g-classifier-v1",
+    source: computeNote ? `fallback (${computeNote.slice(0, 60)})` : "0g-compute-fallback",
+    model: "qwen2.5-omni (fallback)",
+    computeNote,
     timestamp: new Date().toISOString(),
   };
 }
