@@ -12,13 +12,13 @@ Built for the **0G Bridge Buildathon by AKINDO** — Wave 1 Submission.
 
 ---
 
-## 📌 One-Liner Description
+## One-Liner Description
 
 **Hashly is an autonomous on-chain security network that intercepts DeFi exploits in real time using 0G Compute for AI threat classification, 0G Storage for immutable evidence anchoring, and ERC-7857 Agentic IDs for automated circuit breakers on 0G Chain.**
 
 ---
 
-## 📖 Detailed Project Description
+## Detailed Project Description
 
 DeFi exploits cause over **$2 Billion in losses annually**. When reentrancy, flash loan price manipulation, or oracle drift occurs, the attack executes in seconds. Traditional security solutions rely on off-chain human monitoring and alerts (Discord/Telegram bots) which take 15 to 45 minutes to triage — far too late to stop an exploit.
 
@@ -31,7 +31,7 @@ DeFi exploits cause over **$2 Billion in losses annually**. When reentrancy, fla
 
 ---
 
-## ⚡ Full-Stack 0G Integration
+## Full-Stack 0G Integration
 
 Hashly is built from the ground up to utilize all four core pillars of the 0G modular AI ecosystem:
 
@@ -63,7 +63,7 @@ flowchart TD
 
 ---
 
-## 📜 Deployed Smart Contracts (0G Galileo Testnet — Chain ID: 16602)
+## Deployed Smart Contracts (0G Galileo Testnet — Chain ID: 16602)
 
 | Contract | Address on 0G Galileo | Description |
 |---|---|---|
@@ -73,7 +73,7 @@ flowchart TD
 
 ---
 
-## 🗺️ Buildathon Roadmap
+## Buildathon Roadmap
 
 ### Wave 1: Core Architecture & Live On-Chain Integration (Current)
 - [x] **Smart Contract Suite:** Deployed `SentinelRegistry` (ERC-7857), `ProtocolGuard`, and `VulnerableVault` to 0G Galileo Testnet.
